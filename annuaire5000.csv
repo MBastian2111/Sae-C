@@ -1,9 +1,9 @@
 ,Becker,PARIS,75002,01.81.30.33.94,adelaide.becker@server.fr,comptable
-Adelaide,Benoit,MARSEILLE,13012,04.16.23.32.39,adelaide.benoit@server.fr,
-Adelaide,Bertrand,,,02.78.55.93.77,adelaide.bertrand@server.fr,
-Adelaide,Bonnin,,,02.62.45.97.67,adelaide.bonnin@server.fr,
+Adelaide,Benoit,MARSEILLE,13012,04.16.23.32.39,adelaide.benoit@server.fr,comptable
+Adelaide,Bertrand,,,02.78.55.93.77,adelaide.bertrand@server.fr,comptable
+Adelaide,Bonnin,,,02.62.45.97.67,adelaide.bonnin@server.fr,comptable
 ,Faure,TOULON,83100,04.99.54.08.97,adelaide.faure@server.fr,chauffeur
-Adelaide,Launay,PARIS,75012,01.04.72.47.67,adelaide.launay@server.fr,
+Adelaide,Launay,PARIS,75012,01.04.72.47.67,adelaide.launay@server.fr,comptable
 Adelaide,Laurent,MONTPELLIER,34080,04.39.69.09.34,adelaide.laurent@server.fr,journaliste
 Adelaide,Lebon,PARIS,75003,01.05.58.12.86,adelaide.lebon@server.fr,ouvrier
 Adelaide,Lombard,,,04.56.11.63.24,adelaide.lombard@server.fr,
@@ -2479,8 +2479,7 @@ Jean,Le Goff,BORDEAUX,33300,05.80.55.50.62,jean.le-goff@server.fr,militaire
 ,Marechal,,,04.58.23.87.55,,banquier
 Jean,Mary,,,02.07.04.88.29,jean.mary@server.fr,
 Jean,Meyer,LYON,69005,04.96.42.07.90,jean.meyer@server.fr,
-Jean,Philippe,,,01.75.55.38.00,jean.philippe@server.fr,
-Jean,Rousseau de Begue,PARIS,75015,01.91.88.79.31,jean.rousseau-de-begue@server.fr,chercheur
+Jean,Philippe,u dockde Begue,PARIS,75015,01.91.88.79.31,jean.rousseau-de-begue@server.fr,chercheur
 Jean,Valentin du Roy,BORDEAUX,33200,05.94.89.12.95,jean.valentin-du-roy@server.fr,informaticien
 Jean,Voisin-Pons,,,01.73.56.15.12,jean.voisin-pons@server.fr,technicien
 Jean-Adrien,Lesage,NICE,6100,04.69.86.38.10,jean-adrien.lesage@server.fr,
