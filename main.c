@@ -9,12 +9,12 @@ struct personne // Création d'une structure personne pour stocker chaque lignes
     char prenom[50], nom[50], ville[50], numtel[16],email[50], fonction[50], codepost[10]; //création de string pour socker individuelement chaque info
 };
 typedef struct personne personne; // défini la structure personne comme un type
-
+int  nbligne=0;
 
 
 personne* ouvrir_fichier(void)
 {
-   int c, nbligne=0, j=0, k=0, field_count = 0, i =0;
+    int c, j=0, k=0, field_count = 0, i =0;
     char buff[1024];
     FILE *fp = fopen("annuaire5000.csv", "r");
 
@@ -38,7 +38,7 @@ personne* ouvrir_fichier(void)
     fseek(fp, 0, SEEK_SET);
 
 
-    
+
     while (fgets(buff, 1024, fp)) 
     {
         field_count = 0;
@@ -99,16 +99,29 @@ personne* ouvrir_fichier(void)
     return values;
 }
 
-
+int savelefichier(personne values[])
+{
+    int i = 0;
+    FILE *fp = fopen("annuaire5000.csv", "w");
+    if(!fp)
+    {
+        printf("error fichier");
+        return 1;
+    }
+    for(i = 0; i < 400; i++){
+        fprintf(fp, "%s,%s,%s,%s,%s,%s,%s\n", values[i].prenom, values[i].nom, values[i].ville, values[i].codepost, values[i].numtel,values[i].email,values[i].fonction);
+    }
+    return 0;
+}
 
 
 
 
 int main(void)
 {
-    int dieuxleveux =1;
     personne *pelo;
-    pelo = ouvrir_fichier(); 
-    printf("%s", pelo[5].nom);
+    pelo = ouvrir_fichier();
+    printf("%s", pelo[235].nom);
+    savelefichier(pelo);
     return 0;
 }
