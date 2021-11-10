@@ -108,20 +108,26 @@ int savelefichier(personne values[])
         printf("error fichier");
         return 1;
     }
-    for(i = 0; i < 400; i++){
+    for(i = 0; i < nbligne; i++){
         fprintf(fp, "%s,%s,%s,%s,%s,%s,%s\n", values[i].prenom, values[i].nom, values[i].ville, values[i].codepost, values[i].numtel,values[i].email,values[i].fonction);
     }
     return 0;
 }
 
-
+int selecligne(void)
+{
+    printf("Nom : ");
+    scanf("")
+}
 
 
 int main(void)
 {
-    personne *pelo;
+    personne *pelo ;
+    int ligne;
     pelo = ouvrir_fichier();
-    printf("%s", pelo[235].nom);
+    printf("%s", pelo[399].nom);
+    strcpy(pelo[399].nom, "AHHHHHH");
     savelefichier(pelo);
     return 0;
 }
