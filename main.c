@@ -114,20 +114,38 @@ int savelefichier(personne values[])
     return 0;
 }
 
-int selecligne(void)
+int selecligne(personne *pelo)
 {
+    int numligne_a_selec;
+    personne peloachercher;
+    printf("Prenom : ");
+    fgets(peloachercher.prenom, 50, stdin);
     printf("Nom : ");
-    scanf("")
+    fgets(peloachercher.nom, 50, stdin);
+    printf("Ville : ");
+    fgets(peloachercher.ville, 50, stdin);
+    printf("Code Postal : ");
+    fgets(peloachercher.codepost, 10, stdin);
+    printf("Numéro de téléphone : ");
+    fgets(peloachercher.numtel, 16, stdin);
+    printf("E-mail : ");
+    fgets(peloachercher.email, 50, stdin);
+    printf("Fonction : ");
+    fgets(peloachercher.fonction, 50, stdin);
+    for(int i = 0; i<nbligne; i++)
+    {
+        if ((strncmp(peloachercher.prenom, pelo[i].prenom, strlen(peloachercher.prenom))) && (strncmp(peloachercher.nom, pelo[i].nom, strlen(peloachercher.nom))) && (strncmp(peloachercher.ville, pelo[i].ville, strlen(peloachercher.ville))) && (strncmp(peloachercher.codepost, pelo[i].codepost, strlen(peloachercher.codepost))) && (strncmp(peloachercher.numtel, pelo[i].numtel, strlen(peloachercher.numtel))) && (strncmp(peloachercher.email, pelo[i].email, strlen(peloachercher.email))) && (strncmp(peloachercher.fonction, pelo[i].fonction, strlen(peloachercher.fonction))));
+    }
+    return 0;
 }
-
 
 int main(void)
 {
     personne *pelo ;
     int ligne;
     pelo = ouvrir_fichier();
-    printf("%s", pelo[399].nom);
-    strcpy(pelo[399].nom, "AHHHHHH");
+    printf("%s", pelo[389].nom);
+    strcpy(pelo[391].nom, "test");
     savelefichier(pelo);
     return 0;
 }
