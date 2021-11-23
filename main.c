@@ -47,53 +47,74 @@ personne* ouvrir_fichier(void)
         while(buff[j] != '\n' && buff[j] != EOF)
         {
             if (buff[j] == ',')
-            { 
-                field_count++; 
+            {
+                if(field_count == 0)
+                {
+                    values[i].prenom[k] = '\0';
+                }
+                else if(field_count == 1) 
+                {
+                    values[i].nom[k] = '\0';
+                }
+                else if(field_count == 2) 
+                {
+                    values[i].ville[k] = '\0';
+                }
+                else if(field_count == 3) 
+                {
+                    values[i].codepost[k] = '\0';
+                }
+                else if(field_count == 4) 
+                { 
+                    values[i].numtel[k] = '\0';
+                }
+                else if(field_count == 5) 
+                {
+                    values[i].email[k] = '\0';
+                }
+                else if(field_count == 6) 
+                { 
+                    values[i].fonction[k] = '\0'; 
+                }
                 k=0;
+                field_count++; 
             }
             else {
                 if(field_count == 0)
                 {
-                    values[i].prenom[k] = buff[j]; 
-                    values[i].prenom[k+1] = '\0';
+                    values[i].prenom[k] = buff[j];
                 }
                 else if(field_count == 1) 
                 {
                     values[i].nom[k] = buff[j]; 
-                    values[i].nom[k+1] = '\0';
                 }
                 else if(field_count == 2) 
                 {
                     values[i].ville[k] = buff[j]; 
-                    values[i].ville[k+1] = '\0';
                 }
                 else if(field_count == 3) 
                 {
                     values[i].codepost[k] = buff[j]; 
-                    values[i].codepost[k+1] = '\0';
                 }
                 else if(field_count == 4) 
                 {
                     values[i].numtel[k] = buff[j]; 
-                    values[i].numtel[k+1] = '\0';
                 }
                 else if(field_count == 5) 
                 {
                     values[i].email[k] = buff[j]; 
-                    values[i].email[k+1] = '\0';
                 }
                 else if(field_count == 6) 
                 {
                     values[i].fonction[k] = buff[j]; 
-                    values[i].fonction[k+1] = '\0'; 
                 }
                 k++;
             }
             
             j++;
-            
         }   
         i++;
+        
     }
     fclose(fp);
     return values;
@@ -120,21 +141,31 @@ int selecligne(personne *pelo)
     personne peloachercher;
     printf("Prenom : ");
     fgets(peloachercher.prenom, 50, stdin);
+    peloachercher.prenom[strlen(peloachercher.prenom) - 1] = '\0';
     printf("Nom : ");
     fgets(peloachercher.nom, 50, stdin);
+    peloachercher.nom[strlen(peloachercher.nom) - 1] = '\0';
     printf("Ville : ");
     fgets(peloachercher.ville, 50, stdin);
+    peloachercher.ville[strlen(peloachercher.ville) - 1] = '\0';
     printf("Code Postal : ");
     fgets(peloachercher.codepost, 10, stdin);
+    peloachercher.codepost[strlen(peloachercher.codepost) - 1] = '\0';
     printf("Numéro de téléphone : ");
     fgets(peloachercher.numtel, 16, stdin);
+    peloachercher.numtel[strlen(peloachercher.numtel) - 1] = '\0';
     printf("E-mail : ");
     fgets(peloachercher.email, 50, stdin);
+    peloachercher.email[strlen(peloachercher.email) - 1] = '\0';
     printf("Fonction : ");
     fgets(peloachercher.fonction, 50, stdin);
+    peloachercher.fonction[strlen(peloachercher.fonction) - 1] = '\0';
     for(int i = 0; i<nbligne; i++)
     {
-        if ((strncmp(peloachercher.prenom, pelo[i].prenom, strlen(peloachercher.prenom))) && (strncmp(peloachercher.nom, pelo[i].nom, strlen(peloachercher.nom))) && (strncmp(peloachercher.ville, pelo[i].ville, strlen(peloachercher.ville))) && (strncmp(peloachercher.codepost, pelo[i].codepost, strlen(peloachercher.codepost))) && (strncmp(peloachercher.numtel, pelo[i].numtel, strlen(peloachercher.numtel))) && (strncmp(peloachercher.email, pelo[i].email, strlen(peloachercher.email))) && (strncmp(peloachercher.fonction, pelo[i].fonction, strlen(peloachercher.fonction))));
+        if ((strstr(pelo[i].prenom, peloachercher.prenom) != NULL || peloachercher.prenom[0]=='\0') && (strstr(pelo[i].nom, peloachercher.nom) != NULL || peloachercher.nom[0]=='\0') && (strstr(pelo[i].ville, peloachercher.ville) != NULL || peloachercher.ville[0]=='\0') && (strstr(pelo[i].codepost, peloachercher.codepost) != NULL || peloachercher.codepost[0]=='\0') && (strstr(pelo[i].numtel, peloachercher.numtel) != NULL || peloachercher.numtel[0]=='\0') && (strstr(pelo[i].email, peloachercher.email) != NULL || peloachercher.email[0]=='\0') && (strstr(pelo[i].fonction, peloachercher.fonction) != NULL || peloachercher.fonction[0]=='\0'))
+        {
+            printf("ligne %d ==> Prénom : %s| Nom : %s|  Ville : %s| Code postal : %s| Téléphone : %s| Email : %s| Fonction : %s\n",i,pelo[i].prenom,pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel, pelo[i].email, pelo[i].fonction);
+        }
     }
     return 0;
 }
@@ -147,5 +178,6 @@ int main(void)
     printf("%s", pelo[389].nom);
     strcpy(pelo[391].nom, "test");
     savelefichier(pelo);
+    selecligne(pelo);
     return 0;
 }
