@@ -1,4 +1,4 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define MAXCHAR 1000
@@ -30,7 +30,7 @@ personne* ouvrir_fichier(void)
     printf("nbligne : %d \n", nbligne);
     personne *values = NULL;
     values = malloc(sizeof(personne) * nbligne);
-    if(values == NULL) 
+    if(values == NULL)
     {
         printf("check ta ram poto");
         exit(1);
@@ -39,7 +39,7 @@ personne* ouvrir_fichier(void)
 
 
 
-    while (fgets(buff, 1024, fp)) 
+    while (fgets(buff, 1024, fp))
     {
         field_count = 0;
         j=0;
@@ -52,69 +52,69 @@ personne* ouvrir_fichier(void)
                 {
                     values[i].prenom[k] = '\0';
                 }
-                else if(field_count == 1) 
+                else if(field_count == 1)
                 {
                     values[i].nom[k] = '\0';
                 }
-                else if(field_count == 2) 
+                else if(field_count == 2)
                 {
                     values[i].ville[k] = '\0';
                 }
-                else if(field_count == 3) 
+                else if(field_count == 3)
                 {
                     values[i].codepost[k] = '\0';
                 }
-                else if(field_count == 4) 
-                { 
+                else if(field_count == 4)
+                {
                     values[i].numtel[k] = '\0';
                 }
-                else if(field_count == 5) 
+                else if(field_count == 5)
                 {
                     values[i].email[k] = '\0';
                 }
-                else if(field_count == 6) 
-                { 
-                    values[i].fonction[k] = '\0'; 
+                else if(field_count == 6)
+                {
+                    values[i].fonction[k] = '\0';
                 }
                 k=0;
-                field_count++; 
+                field_count++;
             }
             else {
                 if(field_count == 0)
                 {
                     values[i].prenom[k] = buff[j];
                 }
-                else if(field_count == 1) 
+                else if(field_count == 1)
                 {
-                    values[i].nom[k] = buff[j]; 
+                    values[i].nom[k] = buff[j];
                 }
-                else if(field_count == 2) 
+                else if(field_count == 2)
                 {
-                    values[i].ville[k] = buff[j]; 
+                    values[i].ville[k] = buff[j];
                 }
-                else if(field_count == 3) 
+                else if(field_count == 3)
                 {
-                    values[i].codepost[k] = buff[j]; 
+                    values[i].codepost[k] = buff[j];
                 }
-                else if(field_count == 4) 
+                else if(field_count == 4)
                 {
-                    values[i].numtel[k] = buff[j]; 
+                    values[i].numtel[k] = buff[j];
                 }
-                else if(field_count == 5) 
+                else if(field_count == 5)
                 {
-                    values[i].email[k] = buff[j]; 
+                    values[i].email[k] = buff[j];
                 }
-                else if(field_count == 6) 
+                else if(field_count == 6)
                 {
-                    values[i].fonction[k] = buff[j]; 
+                    values[i].fonction[k] = buff[j];
                 }
                 k++;
             }
-            
+
             j++;
-        }   
+        }
         i++;
-        
+
     }
     fclose(fp);
     return values;
@@ -180,9 +180,50 @@ int selecligne(personne *pelo)
         printf("\n");
     }
 
-    
+
     return numligne_a_selec;
 }
+
+void modif_ligne(personne *pelo)
+{
+    int modifier = selecligne;
+    personne peloamodif;
+    printf("Prénom : ");
+    fgets(peloamodif.prenom, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+
+    printf("Nom : ");
+    fgets(peloamodif.nom, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+
+    printf("Ville: ");
+    fgets(peloamodif.ville, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+
+    printf("Code Postal: ");
+    fgets(peloamodif.codepost, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+
+    printf("Numéro de téléphone : ");
+    fgets(peloamodif.numtel, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+
+    printf("E-mail : ");
+    fgets(peloamodif.email, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+
+    printf("Fonction : ");
+    fgets(peloamodif.fonction, 50, stdin);
+    peloamodif.prenom[strlen(peloamodif.prenom) - 1] = '\0';
+    strcpy(pelo[modifier].prenom, peloamodif.prenom);
+}
+
 
 int main(void)
 {
