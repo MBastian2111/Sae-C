@@ -137,7 +137,7 @@ int savelefichier(personne values[])
 
 int selecligne(personne *pelo)
 {
-    int numligne_a_selec, nblignepossible = 0;
+    int numligne_a_selec = -1, nblignepossible = 0;
     personne peloachercher;
     printf("Prenom : ");
     fgets(peloachercher.prenom, 50, stdin);
@@ -177,7 +177,6 @@ int selecligne(personne *pelo)
     else {
         printf("selectionner une ligne avec son numéro : ");
         scanf("%d", &numligne_a_selec);
-        printf("\n");
     }
 
     
@@ -193,6 +192,6 @@ int main(void)
     strcpy(pelo[391].nom, "test");
     savelefichier(pelo);
     test = selecligne(pelo);
-    printf("on a selec la ligne%d",test );
+    printf("on a selec la ligne : %d\n",test );
     return 0;
 }
