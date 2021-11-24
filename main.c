@@ -137,7 +137,7 @@ int savelefichier(personne values[])
 
 int selecligne(personne *pelo)
 {
-    int numligne_a_selec;
+    int numligne_a_selec, nblignepossible = 0;
     personne peloachercher;
     printf("Prenom : ");
     fgets(peloachercher.prenom, 50, stdin);
@@ -160,24 +160,39 @@ int selecligne(personne *pelo)
     printf("Fonction : ");
     fgets(peloachercher.fonction, 50, stdin);
     peloachercher.fonction[strlen(peloachercher.fonction) - 1] = '\0';
+
     for(int i = 0; i<nbligne; i++)
     {
         if ((strstr(pelo[i].prenom, peloachercher.prenom) != NULL || peloachercher.prenom[0]=='\0') && (strstr(pelo[i].nom, peloachercher.nom) != NULL || peloachercher.nom[0]=='\0') && (strstr(pelo[i].ville, peloachercher.ville) != NULL || peloachercher.ville[0]=='\0') && (strstr(pelo[i].codepost, peloachercher.codepost) != NULL || peloachercher.codepost[0]=='\0') && (strstr(pelo[i].numtel, peloachercher.numtel) != NULL || peloachercher.numtel[0]=='\0') && (strstr(pelo[i].email, peloachercher.email) != NULL || peloachercher.email[0]=='\0') && (strstr(pelo[i].fonction, peloachercher.fonction) != NULL || peloachercher.fonction[0]=='\0'))
         {
             printf("ligne %d ==> Prénom : %s| Nom : %s|  Ville : %s| Code postal : %s| Téléphone : %s| Email : %s| Fonction : %s\n",i,pelo[i].prenom,pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel, pelo[i].email, pelo[i].fonction);
+            nblignepossible ++;
         }
     }
-    return 0;
+    if (!(nblignepossible))
+    {
+        printf("Aucun résultat\n");
+        return -1;
+    }
+    else {
+        printf("selectionner une ligne avec son numéro : ");
+        scanf("%d", &numligne_a_selec);
+        printf("\n");
+    }
+
+    
+    return numligne_a_selec;
 }
 
 int main(void)
 {
     personne *pelo ;
-    int ligne;
+    int ligne, test;
     pelo = ouvrir_fichier();
     printf("%s", pelo[389].nom);
     strcpy(pelo[391].nom, "test");
     savelefichier(pelo);
-    selecligne(pelo);
+    test = selecligne(pelo);
+    printf("on a selec la ligne%d",test );
     return 0;
 }
