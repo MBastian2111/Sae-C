@@ -3,14 +3,15 @@
 #include <string.h>
 #define MAXCHAR 1000
 
+int  nbligne=0;
 
 struct personne // Création d'une structure personne pour stocker chaque lignes du fichier
 {
     char prenom[50], nom[50], ville[50], numtel[16],email[50], fonction[50], codepost[10]; //création de string pour socker individuelement chaque info
 };
 typedef struct personne personne; // défini la structure personne comme un type
-int  nbligne=0;
 
+personne defaultpersonne = {'\0','\0','\0','\0','\0','\0','\0'};
 
 personne* ouvrir_fichier(void)
 {
@@ -135,9 +136,29 @@ int savelefichier(personne values[])
     return 0;
 }
 
-int selecligne(personne *pelo)
+int afficher(personne *pelo, personne peloachercher)
 {
-    int numligne_a_selec = -1, nblignepossible = 0;
+    int nblignepossible = 0;
+    for(int i = 0; i<nbligne; i++)
+    {
+        if ((strstr(pelo[i].prenom, peloachercher.prenom) != NULL || peloachercher.prenom[0]=='\0') && (strstr(pelo[i].nom, peloachercher.nom) != NULL || peloachercher.nom[0]=='\0') && (strstr(pelo[i].ville, peloachercher.ville) != NULL || peloachercher.ville[0]=='\0') && (strstr(pelo[i].codepost, peloachercher.codepost) != NULL || peloachercher.codepost[0]=='\0') && (strstr(pelo[i].numtel, peloachercher.numtel) != NULL || peloachercher.numtel[0]=='\0') && (strstr(pelo[i].email, peloachercher.email) != NULL || peloachercher.email[0]=='\0') && (strstr(pelo[i].fonction, peloachercher.fonction) != NULL || peloachercher.fonction[0]=='\0'))
+        {
+            printf("ligne %d ==> Prénom : %s| Nom : %s|  Ville : %s| Code postal : %s| Téléphone : %s| Email : %s| Fonction : %s\n",i,pelo[i].prenom,pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel, pelo[i].email, pelo[i].fonction);
+        nblignepossible++;
+        }
+    }
+    if (!(nblignepossible))
+    {
+        printf("Aucun résultat\n");
+        return -1;
+    }
+    else
+        return 0;
+}
+
+int filtre(personne *pelo)
+{
+    printf("Insérer du texte pour filtrer et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre de filtre\n");
     personne peloachercher;
     printf("Prenom : ");
     fgets(peloachercher.prenom, 50, stdin);
@@ -160,35 +181,52 @@ int selecligne(personne *pelo)
     printf("Fonction : ");
     fgets(peloachercher.fonction, 50, stdin);
     peloachercher.fonction[strlen(peloachercher.fonction) - 1] = '\0';
+    return afficher(pelo, peloachercher);
+}
 
-    for(int i = 0; i<nbligne; i++)
+int selecligne(personne *pelo)
+{
+    int numligne_a_selec = -2;
+    while (numligne_a_selec == -2) 
     {
-        if ((strstr(pelo[i].prenom, peloachercher.prenom) != NULL || peloachercher.prenom[0]=='\0') && (strstr(pelo[i].nom, peloachercher.nom) != NULL || peloachercher.nom[0]=='\0') && (strstr(pelo[i].ville, peloachercher.ville) != NULL || peloachercher.ville[0]=='\0') && (strstr(pelo[i].codepost, peloachercher.codepost) != NULL || peloachercher.codepost[0]=='\0') && (strstr(pelo[i].numtel, peloachercher.numtel) != NULL || peloachercher.numtel[0]=='\0') && (strstr(pelo[i].email, peloachercher.email) != NULL || peloachercher.email[0]=='\0') && (strstr(pelo[i].fonction, peloachercher.fonction) != NULL || peloachercher.fonction[0]=='\0'))
-        {
-            printf("ligne %d ==> Prénom : %s| Nom : %s|  Ville : %s| Code postal : %s| Téléphone : %s| Email : %s| Fonction : %s\n",i,pelo[i].prenom,pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel, pelo[i].email, pelo[i].fonction);
-            nblignepossible ++;
+        numligne_a_selec=filtre(pelo);
+        if (numligne_a_selec == -1)
+        {   
+            do {
+            printf("-2 pour recommencer la recherche, -1 pour finir la recherche\n");
+            scanf("%d", &numligne_a_selec);
+            if (numligne_a_selec != -2 && numligne_a_selec != -1)
+                printf("erreur nombre incorrect");
+            }while (numligne_a_selec != -2 && numligne_a_selec != -1);
         }
-    }
-    if (!(nblignepossible))
-    {
-        printf("Aucun résultat\n");
-        return -1;
-    }
-    else {
-        printf("selectionner une ligne avec son numéro : ");
-        scanf("%d", &numligne_a_selec);
+        else
+        {
+            do {
+            printf("donner le numméro de ligne pour la selectionner, -2 pour recommencer, -1 pour finir la recherche\n");
+            scanf("%d", &numligne_a_selec);
+            if (numligne_a_selec > nbligne)
+                printf("erreur ligne hors champs");
+            if ((numligne_a_selec != -2) && (numligne_a_selec != -1) && (numligne_a_selec<0))
+                printf("erreur nombre incorrect");
+            }while ((numligne_a_selec != -2 && numligne_a_selec != -1 && numligne_a_selec<0 ) || numligne_a_selec > nbligne);
+        }
+
     }
 
     
     return numligne_a_selec;
 }
 
+
+
+
+
+
 int main(void)
 {
     personne *pelo ;
     int ligne, test;
     pelo = ouvrir_fichier();
-    printf("%s", pelo[389].nom);
     strcpy(pelo[391].nom, "test");
     savelefichier(pelo);
     test = selecligne(pelo);
