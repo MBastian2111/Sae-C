@@ -11,9 +11,9 @@ struct personne // Création d'une structure personne pour stocker chaque lignes
 };
 typedef struct personne personne; // défini la structure personne comme un type
 
-personne defaultpersonne = {'\0','\0','\0','\0','\0','\0','\0'};
+personne defaultpersonne = {'\0','\0','\0','\0','\0','\0','\0'}; //Création d'une personne vide pour pouvoir une valeur par défaut sur certainnes fonction
 
-personne* ouvrir_fichier(void)
+personne* ouvrir_fichier(void) //Création d'une fonction qui à pour but d'ouvrir perser un fichier csv
 {
     int c, j=0, k=0, field_count = 0, i =0;
     char buff[1024];
@@ -121,6 +121,13 @@ personne* ouvrir_fichier(void)
     return values;
 }
 
+void viderBuffer(void)
+{
+  int c;
+  while((c=getchar()) != EOF && c != '\n');
+ 
+}
+
 int savelefichier(personne values[])
 {
     int i = 0;
@@ -204,6 +211,7 @@ int selecligne(personne *pelo)
             do {
             printf("donner le numméro de ligne pour la selectionner, -2 pour recommencer, -1 pour finir la recherche\n");
             scanf("%d", &numligne_a_selec);
+            viderBuffer();
             if (numligne_a_selec > nbligne)
                 printf("erreur ligne hors champs");
             if ((numligne_a_selec != -2) && (numligne_a_selec != -1) && (numligne_a_selec<0))
@@ -217,8 +225,35 @@ int selecligne(personne *pelo)
     return numligne_a_selec;
 }
 
+void quicksort(personne pelo[25],int first,int last){
+   int i, j, pivot;
+   personne temp;
 
+   if(first<last){
+      pivot=first;
+      i=first;
+      j=last;
 
+      while(i<j){
+         while((strcmp(pelo[i].numtel,pelo[pivot].numtel)<0)&&i<last)
+            i++;
+         while(strcmp(pelo[j].numtel,pelo[pivot].numtel) > 0)
+            j--;
+         if(i<j){
+            temp=pelo[i];
+            pelo[i]=pelo[j];
+            pelo[j]=temp;
+         }
+      }
+
+      temp=pelo[pivot];
+      pelo[pivot]=pelo[j];
+      pelo[j]=temp;
+      quicksort(pelo,first,j-1);
+      quicksort(pelo,j+1,last);
+
+   }
+}
 
 
 
@@ -227,9 +262,8 @@ int main(void)
     personne *pelo ;
     int ligne, test;
     pelo = ouvrir_fichier();
-    strcpy(pelo[391].nom, "test");
+    quicksort(pelo, 0,nbligne-1);
+    afficher(pelo, defaultpersonne);
     savelefichier(pelo);
-    test = selecligne(pelo);
-    printf("on a selec la ligne : %d\n",test );
     return 0;
-}
+}    char buff[1024];
