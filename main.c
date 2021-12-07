@@ -163,31 +163,38 @@ int afficher(personne *pelo, personne peloachercher)
         return 0;
 }
 
+personne entrer_champs_personne(void)
+ {
+    personne personnetemp;
+    printf("Prenom : ");
+    fgets(personnetemp.prenom, 50, stdin);
+    personnetemp.prenom[strlen(personnetemp.prenom) - 1] = '\0';
+    printf("Nom : ");
+    fgets(personnetemp.nom, 50, stdin);
+    personnetemp.nom[strlen(personnetemp.nom) - 1] = '\0';
+    printf("Ville : ");
+    fgets(personnetemp.ville, 50, stdin);
+    personnetemp.ville[strlen(personnetemp.ville) - 1] = '\0';
+    printf("Code Postal : ");
+    fgets(personnetemp.codepost, 10, stdin);
+    personnetemp.codepost[strlen(personnetemp.codepost) - 1] = '\0';
+    printf("Numéro de téléphone : ");
+    fgets(personnetemp.numtel, 16, stdin);
+    personnetemp.numtel[strlen(personnetemp.numtel) - 1] = '\0';
+    printf("E-mail : ");
+    fgets(personnetemp.email, 50, stdin);
+    personnetemp.email[strlen(personnetemp.email) - 1] = '\0';
+    printf("Fonction : ");
+    fgets(personnetemp.fonction, 50, stdin);
+    personnetemp.fonction[strlen(personnetemp.fonction) - 1] = '\0';
+    return personnetemp;
+ }
+
 int filtre(personne *pelo)
 {
-    printf("Insérer du texte pour filtrer et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre de filtre\n");
     personne peloachercher;
-    printf("Prenom : ");
-    fgets(peloachercher.prenom, 50, stdin);
-    peloachercher.prenom[strlen(peloachercher.prenom) - 1] = '\0';
-    printf("Nom : ");
-    fgets(peloachercher.nom, 50, stdin);
-    peloachercher.nom[strlen(peloachercher.nom) - 1] = '\0';
-    printf("Ville : ");
-    fgets(peloachercher.ville, 50, stdin);
-    peloachercher.ville[strlen(peloachercher.ville) - 1] = '\0';
-    printf("Code Postal : ");
-    fgets(peloachercher.codepost, 10, stdin);
-    peloachercher.codepost[strlen(peloachercher.codepost) - 1] = '\0';
-    printf("Numéro de téléphone : ");
-    fgets(peloachercher.numtel, 16, stdin);
-    peloachercher.numtel[strlen(peloachercher.numtel) - 1] = '\0';
-    printf("E-mail : ");
-    fgets(peloachercher.email, 50, stdin);
-    peloachercher.email[strlen(peloachercher.email) - 1] = '\0';
-    printf("Fonction : ");
-    fgets(peloachercher.fonction, 50, stdin);
-    peloachercher.fonction[strlen(peloachercher.fonction) - 1] = '\0';
+    printf("Insérer du texte pour filtrer et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre de filtre\n");
+    peloachercher=entrer_champs_personne();
     return afficher(pelo, peloachercher);
 }
 
@@ -225,7 +232,8 @@ int selecligne(personne *pelo)
     return numligne_a_selec;
 }
 
-void quicksort(personne pelo[25],int first,int last){
+void quicksort(personne pelo[],int first,int last)
+{
    int i, j, pivot;
    personne temp;
 
@@ -256,6 +264,15 @@ void quicksort(personne pelo[25],int first,int last){
 }
 
 
+void ajout_personne(personne ligne[])
+{
+    personne personne_a_ajouter;
+    printf("Saisisser les information et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
+    personne_a_ajouter=entrer_champs_personne();
+    ligne = realloc(ligne,sizeof(personne) * nbligne + sizeof(personne));
+    nbligne++;
+    ligne[nbligne-1]=personne_a_ajouter;
+}
 
 int main(void)
 {
@@ -264,6 +281,7 @@ int main(void)
     pelo = ouvrir_fichier();
     quicksort(pelo, 0,nbligne-1);
     afficher(pelo, defaultpersonne);
+    ajout_personne(pelo);
     savelefichier(pelo);
     return 0;
-}    char buff[1024];
+}  
