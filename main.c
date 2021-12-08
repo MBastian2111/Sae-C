@@ -263,6 +263,22 @@ void quicksort(personne pelo[],int first,int last)
    }
 }
 
+void modif_personne(personne *pelo)
+{
+    int ligne_selec;
+    ligne_selec=selecligne(pelo);
+    if (ligne_selec == -1) 
+        exit(-1);
+    personne personne_a_modifier=entrer_champs_personne();
+    if (personne_a_modifier.prenom[0] != '\0') strcpy(pelo[ligne_selec].prenom, personne_a_modifier.prenom);
+    if (personne_a_modifier.nom[0] != '\0') strcpy(pelo[ligne_selec].nom, personne_a_modifier.nom);
+    if (personne_a_modifier.ville[0] != '\0') strcpy(pelo[ligne_selec].ville, personne_a_modifier.ville);
+    if (personne_a_modifier.codepost[0] != '\0') strcpy(pelo[ligne_selec].codepost, personne_a_modifier.codepost);
+    if (personne_a_modifier.numtel[0] != '\0') strcpy(pelo[ligne_selec].numtel, personne_a_modifier.numtel);
+    if (personne_a_modifier.email[0] != '\0') strcpy(pelo[ligne_selec].email, personne_a_modifier.email);
+    if (personne_a_modifier.fonction[0] != '\0') strcpy(pelo[ligne_selec].fonction, personne_a_modifier.fonction);
+    printf("La ligne à été modifié\n");
+}
 
 void ajout_personne(personne ligne[])
 {
@@ -273,6 +289,17 @@ void ajout_personne(personne ligne[])
     nbligne++;
     ligne[nbligne-1]=personne_a_ajouter;
 }
+void suppression_personne(personne ligne[])
+{
+    personne personne_a_ajouter;
+    printf("Saisisser les information et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
+    personne_a_ajouter=entrer_champs_personne();
+    ligne = realloc(ligne,sizeof(personne) * nbligne + sizeof(personne));
+    nbligne++;
+    ligne[nbligne-1]=personne_a_ajouter;
+}
+
+
 
 int main(void)
 {
@@ -280,8 +307,7 @@ int main(void)
     int ligne, test;
     pelo = ouvrir_fichier();
     quicksort(pelo, 0,nbligne-1);
-    afficher(pelo, defaultpersonne);
-    ajout_personne(pelo);
+    modif_personne(pelo);
     savelefichier(pelo);
     return 0;
-}  
+}
