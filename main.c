@@ -111,7 +111,6 @@ personne* ouvrir_fichier(void) //Création d'une fonction qui à pour but d'ouvr
                 }
                 k++;
             }
-            
             j++;
         }   
         i++;
@@ -128,18 +127,22 @@ void viderBuffer(void)
  
 }
 
-int savelefichier(personne values[])
+int savelefichier(personne *pelo)
 {
     int i = 0;
-    FILE *fp = fopen("annuaire5000.csv", "w");
-    if(!fp)
+    FILE *fw = fopen("annuaire5000.csv", "w");
+    printf("test 8\n");
+    if(!fw)
     {
         printf("error fichier");
         return 1;
     }
-    for(i = 0; i < nbligne; i++){
-        fprintf(fp, "%s,%s,%s,%s,%s,%s,%s\n", values[i].prenom, values[i].nom, values[i].ville, values[i].codepost, values[i].numtel,values[i].email,values[i].fonction);
+    printf("test 8\n");
+    for(i = 0; i < nbligne; i++)
+    {
+        fprintf(fw, "%s,%s,%s,%s,%s,%s,%s\n", pelo[i].prenom, pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel,pelo[i].email,pelo[i].fonction);
     }
+    fclose(fw);
     return 0;
 }
 
@@ -232,7 +235,7 @@ int selecligne(personne *pelo)
     return numligne_a_selec;
 }
 
-void quicksort(personne pelo[],int first,int last)
+void quicksort(personne *pelo,int first,int last)
 {
    int i, j, pivot;
    personne temp;
@@ -280,16 +283,29 @@ void modif_personne(personne *pelo)
     printf("La ligne à été modifié\n");
 }
 
-void ajout_personne(personne ligne[])
+personne* ajout_personne(personne *ligne)
 {
     personne personne_a_ajouter;
+    printf("test 1\n");
     printf("Saisisser les information et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
+    printf("test 2\n");
     personne_a_ajouter=entrer_champs_personne();
+    printf("test 3\n");
     ligne = realloc(ligne,sizeof(personne) * nbligne + sizeof(personne));
+    printf("test 4\n");
+    if(!ligne)
+    {
+        printf("error fichier");
+        exit(-1);
+    }
+    printf("test 4\n");
     nbligne++;
+    printf("test 5\n");
     ligne[nbligne-1]=personne_a_ajouter;
+    return ligne;
+    printf("test 6\n");
 }
-void suppression_personne(personne ligne[])
+void suppression_personne(personne *ligne)
 {
     personne personne_a_ajouter;
     printf("Saisisser les information et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
@@ -307,7 +323,9 @@ int main(void)
     int ligne, test;
     pelo = ouvrir_fichier();
     quicksort(pelo, 0,nbligne-1);
-    modif_personne(pelo);
+    afficher(pelo,  defaultpersonne);
+    pelo = ajout_personne(pelo);
+    printf("test7 %s", pelo[nbligne-1].nom);
     savelefichier(pelo);
     return 0;
 }
