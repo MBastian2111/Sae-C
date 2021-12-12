@@ -7,13 +7,13 @@ int  nbligne=0;
 
 struct personne // Création d'une structure personne pour stocker chaque lignes du fichier
 {
-    char prenom[50], nom[50], ville[50], numtel[16],email[50], fonction[50], codepost[10]; //création de string pour socker individuelement chaque info
+    char prenom[50], nom[50], ville[50], numtel[16],email[50], fonction[50], codepost[6]; //création de string pour stocker individuelement chaque info
 };
 typedef struct personne personne; // défini la structure personne comme un type
 
 personne defaultpersonne = {'\0','\0','\0','\0','\0','\0','\0'}; //Création d'une personne vide pour pouvoir une valeur par défaut sur certainnes fonction
 
-personne* ouvrir_fichier(void) //Création d'une fonction qui à pour but d'ouvrir perser un fichier csv
+personne* ouvrir_fichier(char* nom_fichier) //Création d'une fonction qui à pour but d'ouvrir perser un fichier csv
 {
     int c, j=0, k=0, field_count = 0, i =0;
     char buff[1024];
@@ -49,33 +49,15 @@ personne* ouvrir_fichier(void) //Création d'une fonction qui à pour but d'ouvr
         {
             if (buff[j] == ',')
             {
-                if(field_count == 0)
+                switch (field_count) 
                 {
-                    values[i].prenom[k] = '\0';
-                }
-                else if(field_count == 1) 
-                {
-                    values[i].nom[k] = '\0';
-                }
-                else if(field_count == 2) 
-                {
-                    values[i].ville[k] = '\0';
-                }
-                else if(field_count == 3) 
-                {
-                    values[i].codepost[k] = '\0';
-                }
-                else if(field_count == 4) 
-                { 
-                    values[i].numtel[k] = '\0';
-                }
-                else if(field_count == 5) 
-                {
-                    values[i].email[k] = '\0';
-                }
-                else if(field_count == 6) 
-                { 
-                    values[i].fonction[k] = '\0'; 
+                    case 0: values[i].prenom[k] = '\0';
+                    case 1: values[i].nom[k] = '\0';
+                    case 2: values[i].ville[k] = '\0';
+                    case 3: values[i].codepost[k] = '\0';
+                    case 4: values[i].numtel[k] = '\0';
+                    case 5: values[i].email[k] = '\0';
+                    case 6: values[i].fonction[k] = '\0'; 
                 }
                 k=0;
                 field_count++; 
@@ -124,20 +106,17 @@ void viderBuffer(void)
 {
   int c;
   while((c=getchar()) != EOF && c != '\n');
- 
 }
 
 int savelefichier(personne *pelo)
 {
     int i = 0;
     FILE *fw = fopen("annuaire5000.csv", "w");
-    printf("test 8\n");
     if(!fw)
     {
         printf("error fichier");
         return 1;
     }
-    printf("test 8\n");
     for(i = 0; i < nbligne; i++)
     {
         fprintf(fw, "%s,%s,%s,%s,%s,%s,%s\n", pelo[i].prenom, pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel,pelo[i].email,pelo[i].fonction);
@@ -167,20 +146,67 @@ int afficher(personne *pelo, personne peloachercher)
 }
 
 personne entrer_champs_personne(void)
- {
+{
+    int i, boole = 1, c; 
     personne personnetemp;
     printf("Prenom : ");
     fgets(personnetemp.prenom, 50, stdin);
     personnetemp.prenom[strlen(personnetemp.prenom) - 1] = '\0';
+    if (personnetemp.prenom[0] < 123 &&  personnetemp.prenom[0] > 96)
+        personnetemp.prenom[0] = personnetemp.prenom[0] - 32;
+    for (i = 0; i< strlen(personnetemp.prenom); i++)
+    {
+        if (personnetemp.prenom[i]=='-')
+            if (personnetemp.prenom[i+1] < 123 &&  personnetemp.prenom[i+1] > 96)
+                personnetemp.prenom[i+1] = personnetemp.prenom[i+1] - 32;
+    }
+
     printf("Nom : ");
     fgets(personnetemp.nom, 50, stdin);
     personnetemp.nom[strlen(personnetemp.nom) - 1] = '\0';
+    if (personnetemp.nom[0] < 123 &&  personnetemp.nom[0] > 96)
+        personnetemp.nom[0] = personnetemp.nom[0] - 32;
+    for (i = 0; i< strlen(personnetemp.nom); i++)
+        if (personnetemp.nom[i]=='-')
+            if (personnetemp.nom[i+1] < 123 &&  personnetemp.nom[i+1] > 96)
+                personnetemp.nom[i+1] = personnetemp.nom[i+1] - 32;
+
     printf("Ville : ");
     fgets(personnetemp.ville, 50, stdin);
     personnetemp.ville[strlen(personnetemp.ville) - 1] = '\0';
+    for (i = 0; i< strlen(personnetemp.ville); i++)
+        if (personnetemp.ville[i] < 123 &&  personnetemp.ville[i] > 96)
+            personnetemp.ville[i] = personnetemp.ville[i] - 32;
+    
+    do 
+    {
+    i = 0;
     printf("Code Postal : ");
-    fgets(personnetemp.codepost, 10, stdin);
-    personnetemp.codepost[strlen(personnetemp.codepost) - 1] = '\0';
+    fgets(personnetemp.codepost, 6, stdin);
+    while(personnetemp.codepost[i] != '\n')
+        i++;
+    personnetemp.codepost[i] = '\0';
+    boole = 1;
+    if(personnetemp.codepost[0]!=0)
+    {
+        printf("%s", personnetemp.codepost);
+        for(i = 0; i < 5; i++)
+        { 
+            if (personnetemp.codepost[i] < 47 || personnetemp.codepost[i] > 57)
+            {
+                printf("%d", personnetemp.codepost[i]);
+                boole =0;
+                personnetemp.codepost[0]='\0';
+                break;
+            }
+            else 
+            {
+                boole = 1;
+            }
+        }
+        viderBuffer();
+    }
+    }while (!boole);
     printf("Numéro de téléphone : ");
     fgets(personnetemp.numtel, 16, stdin);
     personnetemp.numtel[strlen(personnetemp.numtel) - 1] = '\0';
@@ -212,6 +238,7 @@ int selecligne(personne *pelo)
             do {
             printf("-2 pour recommencer la recherche, -1 pour finir la recherche\n");
             scanf("%d", &numligne_a_selec);
+            viderBuffer();
             if (numligne_a_selec != -2 && numligne_a_selec != -1)
                 printf("erreur nombre incorrect");
             }while (numligne_a_selec != -2 && numligne_a_selec != -1);
@@ -230,7 +257,6 @@ int selecligne(personne *pelo)
         }
 
     }
-
     
     return numligne_a_selec;
 }
@@ -286,33 +312,41 @@ void modif_personne(personne *pelo)
 personne* ajout_personne(personne *ligne)
 {
     personne personne_a_ajouter;
-    printf("test 1\n");
     printf("Saisisser les information et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
-    printf("test 2\n");
     personne_a_ajouter=entrer_champs_personne();
-    printf("test 3\n");
     ligne = realloc(ligne,sizeof(personne) * nbligne + sizeof(personne));
-    printf("test 4\n");
     if(!ligne)
     {
-        printf("error fichier");
+        printf("Ram de ses morts");
         exit(-1);
     }
-    printf("test 4\n");
     nbligne++;
-    printf("test 5\n");
     ligne[nbligne-1]=personne_a_ajouter;
     return ligne;
-    printf("test 6\n");
 }
-void suppression_personne(personne *ligne)
+personne* suppression_personne(personne *ligne)
 {
-    personne personne_a_ajouter;
-    printf("Saisisser les information et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
-    personne_a_ajouter=entrer_champs_personne();
-    ligne = realloc(ligne,sizeof(personne) * nbligne + sizeof(personne));
-    nbligne++;
-    ligne[nbligne-1]=personne_a_ajouter;
+    int ligne_selec, i;
+    printf("Saisisser les information de la personne à supprimer et appuyer sur entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
+    ligne_selec = selecligne(ligne);
+    if (ligne_selec == -1)
+    {
+        printf("aucune ligne selectionné");
+        return ligne;
+    }
+    printf("Ram de ses morts");
+    for(i = ligne_selec ; i<nbligne ; i ++ )
+        {
+            ligne[i] = ligne[i+1];
+        }
+    ligne = realloc(ligne,sizeof(personne) * nbligne - sizeof(personne));
+    if(!ligne)
+    {
+        printf("Ram de ses morts");
+        exit(-1);
+    }
+    nbligne--;
+    return ligne;
 }
 
 
@@ -320,12 +354,10 @@ void suppression_personne(personne *ligne)
 int main(void)
 {
     personne *pelo ;
-    int ligne, test;
-    pelo = ouvrir_fichier();
-    quicksort(pelo, 0,nbligne-1);
-    afficher(pelo,  defaultpersonne);
-    pelo = ajout_personne(pelo);
-    printf("test7 %s", pelo[nbligne-1].nom);
+    int ligne, etat;
+    pelo = ouvrir_fichier("test");
+    modif_personne(pelo);
     savelefichier(pelo);
+
     return 0;
 }
