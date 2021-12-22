@@ -7,7 +7,7 @@ int  nbligne=0;
 
 struct personne // Création d'une structure personne pour stocker chaque lignes du fichier
 {
-    char prenom[50], nom[50], ville[50], numtel[16],email[50], fonction[50], codepost[6]; //création de string pour stocker individuelement chaque info
+    char prenom[50], nom[50], ville[50], numtel[15],email[50], fonction[50], codepost[6]; //création de string pour stocker individuelement chaque info
 };
 typedef struct personne personne; // défini la structure personne comme un type
 
@@ -147,7 +147,8 @@ int afficher(personne *pelo, personne peloachercher)
 
 personne entrer_champs_personne(void)
 {
-    int i, boole = 1, c; 
+    int i,j, boole = 1, c;
+    char temp;
     personne personnetemp;
     printf("Prenom : ");
     fgets(personnetemp.prenom, 50, stdin);
@@ -194,7 +195,6 @@ personne entrer_champs_personne(void)
         { 
             if (personnetemp.codepost[i] < 47 || personnetemp.codepost[i] > 57)
             {
-                printf("%d", personnetemp.codepost[i]);
                 boole =0;
                 personnetemp.codepost[0]='\0';
                 break;
@@ -207,9 +207,23 @@ personne entrer_champs_personne(void)
         viderBuffer();
     }
     }while (!boole);
+    do {
     printf("Numéro de téléphone : ");
-    fgets(personnetemp.numtel, 16, stdin);
-    personnetemp.numtel[strlen(personnetemp.numtel) - 1] = '\0';
+    fgets(personnetemp.numtel, 15, stdin);
+    personnetemp.email[strlen(personnetemp.numtel) - 1] = '\0';
+    if(personnetemp.numtel[0]!=0)
+    {
+        for ( i = 0 ; i<13; i++)
+        {
+            if( ((i-2) % 3) == 0 && personnetemp.numtel[i]!='.')
+            {
+                for( j = 14; j>i ; j--)
+                    personnetemp.numtel[j] = personnetemp.numtel[j-1];
+                personnetemp.numtel[i]='.';
+                }
+        }
+    }
+    }while (!boole);
     printf("E-mail : ");
     fgets(personnetemp.email, 50, stdin);
     personnetemp.email[strlen(personnetemp.email) - 1] = '\0';
