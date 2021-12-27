@@ -1,13 +1,16 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#define MAXCHAR 1000
+#define STRIN 25
+#define LSTRIN 40
+#define SSTRIN 15
+#define VSSTRIN 6
 
 int  nbligne=0;
 
 struct personne // Création d'une structure personne pour stocker chaque lignes du fichier
 {
-    char prenom[50], nom[50], ville[50], numtel[15],email[50], fonction[50], codepost[6]; //création de string pour stocker individuelement chaque info
+    char prenom[STRIN], nom[STRIN], ville[STRIN], numtel[SSTRIN],email[LSTRIN], fonction[STRIN], codepost[VSSTRIN]; //création de string pour stocker individuelement chaque info
 };
 typedef struct personne personne; // défini la structure personne comme un type
 
@@ -127,7 +130,20 @@ int savelefichier(personne *pelo)
 
 int afficher(personne *pelo, personne peloachercher)
 {
-    int nblignepossible = 0;
+    int nblignepossible = 0, conteur = 1;
+    for (conteur=0;conteur<180; conteur++)
+        printf("_");
+    printf("\n");
+    printf("|%7s|%25s|%25s|%25s|%6s|%15s|%40s|%25s|\n", "ligne","prenom", "nom", "ville", "code postal", "téléphone", "email","fonction");
+    for (conteur=0;conteur<180; conteur++)
+    {
+        if (conteur == 0 || conteur == 179 || conteur == 8 || conteur == 34 || conteur == 60 || conteur == 86 || conteur == 98 || conteur == 112 || conteur == 145)
+            printf("|");
+        else
+            printf("_");
+    }
+    printf("\n");
+    return 0;
     for(int i = 0; i<nbligne; i++)
     {
         if ((strstr(pelo[i].prenom, peloachercher.prenom) != NULL || peloachercher.prenom[0]=='\0') && (strstr(pelo[i].nom, peloachercher.nom) != NULL || peloachercher.nom[0]=='\0') && (strstr(pelo[i].ville, peloachercher.ville) != NULL || peloachercher.ville[0]=='\0') && (strstr(pelo[i].codepost, peloachercher.codepost) != NULL || peloachercher.codepost[0]=='\0') && (strstr(pelo[i].numtel, peloachercher.numtel) != NULL || peloachercher.numtel[0]=='\0') && (strstr(pelo[i].email, peloachercher.email) != NULL || peloachercher.email[0]=='\0') && (strstr(pelo[i].fonction, peloachercher.fonction) != NULL || peloachercher.fonction[0]=='\0'))
@@ -151,7 +167,7 @@ personne entrer_champs_personne(void)
     char temp;
     personne personnetemp;
     printf("Prenom : ");
-    fgets(personnetemp.prenom, 50, stdin);
+    fgets(personnetemp.prenom, STRIN, stdin);
     personnetemp.prenom[strlen(personnetemp.prenom) - 1] = '\0';
     if (personnetemp.prenom[0] < 123 &&  personnetemp.prenom[0] > 96)
         personnetemp.prenom[0] = personnetemp.prenom[0] - 32;
@@ -163,7 +179,7 @@ personne entrer_champs_personne(void)
     }
 
     printf("Nom : ");
-    fgets(personnetemp.nom, 50, stdin);
+    fgets(personnetemp.nom, STRIN, stdin);
     personnetemp.nom[strlen(personnetemp.nom) - 1] = '\0';
     if (personnetemp.nom[0] < 123 &&  personnetemp.nom[0] > 96)
         personnetemp.nom[0] = personnetemp.nom[0] - 32;
@@ -173,7 +189,7 @@ personne entrer_champs_personne(void)
                 personnetemp.nom[i+1] = personnetemp.nom[i+1] - 32;
 
     printf("Ville : ");
-    fgets(personnetemp.ville, 50, stdin);
+    fgets(personnetemp.ville, STRIN, stdin);
     personnetemp.ville[strlen(personnetemp.ville) - 1] = '\0';
     for (i = 0; i< strlen(personnetemp.ville); i++)
         if (personnetemp.ville[i] < 123 &&  personnetemp.ville[i] > 96)
@@ -183,12 +199,12 @@ personne entrer_champs_personne(void)
     {
     i = 0;
     printf("Code Postal : ");
-    fgets(personnetemp.codepost, 6, stdin);
+    fgets(personnetemp.codepost, VSSTRIN, stdin);
     while(personnetemp.codepost[i] != '\n')
         i++;
     personnetemp.codepost[i] = '\0';
     boole = 1;
-    if(personnetemp.codepost[0]!=0)
+    if(personnetemp.codepost[0]!='\0')
     {
         printf("%s", personnetemp.codepost);
         for(i = 0; i < 5; i++)
@@ -207,13 +223,12 @@ personne entrer_champs_personne(void)
         viderBuffer();
     }
     }while (!boole);
-    do {
     printf("Numéro de téléphone : ");
-    fgets(personnetemp.numtel, 15, stdin);
-    personnetemp.email[strlen(personnetemp.numtel) - 1] = '\0';
+    fgets(personnetemp.numtel, SSTRIN, stdin);
+    personnetemp.numtel[strlen(personnetemp.numtel)-1] = '\0';
     if(personnetemp.numtel[0]!=0)
     {
-        for ( i = 0 ; i<13; i++)
+        for ( i = 0 ; i<strlen(personnetemp.numtel); i++)
         {
             if( ((i-2) % 3) == 0 && personnetemp.numtel[i]!='.')
             {
@@ -223,12 +238,11 @@ personne entrer_champs_personne(void)
                 }
         }
     }
-    }while (!boole);
     printf("E-mail : ");
-    fgets(personnetemp.email, 50, stdin);
+    fgets(personnetemp.email, LSTRIN, stdin);
     personnetemp.email[strlen(personnetemp.email) - 1] = '\0';
     printf("Fonction : ");
-    fgets(personnetemp.fonction, 50, stdin);
+    fgets(personnetemp.fonction, 20, stdin);
     personnetemp.fonction[strlen(personnetemp.fonction) - 1] = '\0';
     return personnetemp;
  }
