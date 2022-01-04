@@ -126,33 +126,6 @@ personne* ouvrir_fichier(char* nom_fichier) //Création d'une fonction qui à po
     return values;
 }
 
-int estla(char ch2[] ,char ch1[])
-{
-
-    int count1 = 0, count2 = 0, i, j, flag;
-    while (ch2[count1] != '\0')
-        count1++;
-    while (ch1[count2] != '\0')
-        count2++;
-    for (i = 0; i <= count1 - count2; i++)
-    {
-        for (j = i; j < i + count2; j++)
-        {
-            flag = 1;
-            if (ch2[j] != ch1[j - i])
-            {
-                flag = 0;
-                break;
-            }
-        }
-        if (flag == 1)
-            break;
-    }
-    if (flag == 1)
-        return 1;
-    else
-        return 0;
-}
 
 void viderBuffer(void)
 {
@@ -230,7 +203,7 @@ personne entrer_champs_personne(void)
         personnetemp.prenom[0] = personnetemp.prenom[0] - 32;
     for (i = 0; i< strlen(personnetemp.prenom); i++)
     {
-        if (personnetemp.prenom[i]=='-')
+        if (personnetemp.prenom[i]=='-' || personnetemp.prenom[i]==' ')
             if (personnetemp.prenom[i+1] < 123 &&  personnetemp.prenom[i+1] > 96)
                 personnetemp.prenom[i+1] = personnetemp.prenom[i+1] - 32;
     }
@@ -241,7 +214,7 @@ personne entrer_champs_personne(void)
     if (personnetemp.nom[0] < 123 &&  personnetemp.nom[0] > 96)
         personnetemp.nom[0] = personnetemp.nom[0] - 32;
     for (i = 0; i< strlen(personnetemp.nom); i++)
-        if (personnetemp.nom[i]=='-')
+        if (personnetemp.nom[i]=='-'|| personnetemp.prenom[i]==' ')
             if (personnetemp.nom[i+1] < 123 &&  personnetemp.nom[i+1] > 96)
                 personnetemp.nom[i+1] = personnetemp.nom[i+1] - 32;
 
