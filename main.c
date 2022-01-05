@@ -8,16 +8,22 @@
 
 int nbligne = 0;
 
-struct personne // Création d'une structure personne pour stocker chaque lignes du fichier
+struct personne // Création d'une structure personne pour stocker chaque lignes
+                // du fichier
 {
-  char prenom[STRIN], nom[STRIN], ville[STRIN], numtel[SSTRIN], email[LSTRIN], fonction[STRIN], codepost[VSSTRIN]; // création de string pour stocker individuelement chaque info
+  char prenom[STRIN], nom[STRIN], ville[STRIN], numtel[SSTRIN], email[LSTRIN],
+      fonction[STRIN], codepost[VSSTRIN]; // création de string pour stocker
+                                          // individuelement chaque info
 };
 typedef struct personne personne; // défini la structure personne comme un type
 
-personne defaultpersonne = {'\0', '\0', '\0', '\0','\0', '\0', '\0'}; // Création d'une personne vide pour pouvoir une valeur par défaut sur certainnes fonction
+personne defaultpersonne = {
+    '\0', '\0', '\0', '\0',
+    '\0', '\0', '\0'}; // Création d'une personne vide pour pouvoir une valeur
+                       // par défaut sur certainnes fonction
 
-personne *
-ouvrir_fichier(char *nom_fichier) // Création d'une fonction qui à pour butd'ouvrir perser un fichier csv
+personne * ouvrir_fichier(char *nom_fichier) // Création d'une fonction qui à pour
+                                  // butd'ouvrir perser un fichier csv
 {
   int c, j = 0, k = 0, field_count = 0, i = 0;
   char buff[1024], t[10];
@@ -209,7 +215,6 @@ personne entrer_champs_personne(void) {
     personnetemp.codepost[i] = '\0';
     boole = 1;
     if (personnetemp.codepost[0] != '\0') {
-      printf("%s", personnetemp.codepost);
       for (i = 0; i < 5; i++) {
         if (personnetemp.codepost[i] < 47 || personnetemp.codepost[i] > 57) {
           boole = 0;
@@ -240,7 +245,6 @@ personne entrer_champs_personne(void) {
   printf("Fonction : ");
   fgets(personnetemp.fonction, STRIN, stdin);
   personnetemp.fonction[strlen(personnetemp.fonction) - 1] = '\0';
-  printf("test");
   return personnetemp;
 }
 
@@ -288,183 +292,185 @@ int selecligne(personne *pelo) {
 void quicksort(personne *pelo, int first, int last, int type_info) {
   int i, j, pivot;
   personne temp;
-	switch (type_info) {
-		case 0:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+  switch (type_info) {
+  case 0:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].prenom, pelo[pivot].prenom) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].prenom, pelo[pivot].prenom) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].prenom, pelo[pivot].prenom) <= 0) && i < last)
+          i++;
+        while (strcmp(pelo[j].prenom, pelo[pivot].prenom) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-		case 1:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  case 1:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].nom, pelo[pivot].nom) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].nom, pelo[pivot].nom) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].nom, pelo[pivot].nom) <= 0) && i < last)
+          i++;
+        while (strcmp(pelo[j].nom, pelo[pivot].nom) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-		case 2:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  case 2:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].ville, pelo[pivot].ville) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].ville, pelo[pivot].ville) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].ville, pelo[pivot].ville) <= 0) && i < last)
+          i++;
+        while (strcmp(pelo[j].ville, pelo[pivot].ville) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-		case 3:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  case 3:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].codepost, pelo[pivot].codepost) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].codepost, pelo[pivot].codepost) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].codepost, pelo[pivot].codepost) <= 0) &&
+               i < last)
+          i++;
+        while (strcmp(pelo[j].codepost, pelo[pivot].codepost) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-		case 4:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  case 4:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].numtel, pelo[pivot].numtel) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].numtel, pelo[pivot].numtel) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].numtel, pelo[pivot].numtel) <= 0) && i < last)
+          i++;
+        while (strcmp(pelo[j].numtel, pelo[pivot].numtel) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-		case 5:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  case 5:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].email, pelo[pivot].email) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].email, pelo[pivot].email) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].email, pelo[pivot].email) <= 0) && i < last)
+          i++;
+        while (strcmp(pelo[j].email, pelo[pivot].email) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-		case 6:
-			if (first < last) {
-			pivot = first;
-			i = first;
-			j = last;
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  case 6:
+    if (first < last) {
+      pivot = first;
+      i = first;
+      j = last;
 
-			while (i < j) {
-				while ((strcmp(pelo[i].fonction, pelo[pivot].fonction) <= 0) && i < last)
-					i++;
-				while (strcmp(pelo[j].fonction, pelo[pivot].fonction) > 0)
-					j--;
-				if (i < j) {
-					temp = pelo[i];
-					pelo[i] = pelo[j];
-					pelo[j] = temp;
-				}
-			}
+      while (i < j) {
+        while ((strcmp(pelo[i].fonction, pelo[pivot].fonction) <= 0) &&
+               i < last)
+          i++;
+        while (strcmp(pelo[j].fonction, pelo[pivot].fonction) > 0)
+          j--;
+        if (i < j) {
+          temp = pelo[i];
+          pelo[i] = pelo[j];
+          pelo[j] = temp;
+        }
+      }
 
-			temp = pelo[pivot];
-			pelo[pivot] = pelo[j];
-			pelo[j] = temp;
-			quicksort(pelo, first, j - 1, 0);
-			quicksort(pelo, j + 1, last, 0);
-		}
-		break;
-	}
+      temp = pelo[pivot];
+      pelo[pivot] = pelo[j];
+      pelo[j] = temp;
+      quicksort(pelo, first, j - 1, 0);
+      quicksort(pelo, j + 1, last, 0);
+    }
+    break;
+  }
 }
 
 void modif_personne(personne *pelo) {
@@ -495,7 +501,6 @@ personne *ajout_personne(personne *ligne) {
   printf("Saisisser les information et appuyer sur entrer, appuyer juste sur "
          "entrer pour ne pas mettre d'information\n");
   personne_a_ajouter = entrer_champs_personne();
-	printf("test");
   ligne = realloc(ligne, sizeof(personne) * nbligne + sizeof(personne));
   if (!ligne) {
     printf("Ram de ses morts");
@@ -529,52 +534,75 @@ personne *suppression_personne(personne *ligne) {
 }
 
 int main(void) {
-  personne *annuaire=NULL;
-  int ligne, etat, cpasfini=1, etatfichier=0, choix;
-	char nomfichier[100];
-while (cpasfini) {
-	if(etatfichier == 0)
-	{
-		printf("Aucun fichier n'est ouvert, 1 pour ouvrir un fichier 2 pour fermer :\n");
-		scanf("%d", &choix);
-		viderBuffer();
-		if(choix == 1)
-		{
-			do {
-			printf("rentrer le nom du fichier à ouvrir :\n");
-			fgets(nomfichier, 100, stdin);
-			nomfichier[strlen(nomfichier) - 1] = '\0';
-			annuaire=ouvrir_fichier(nomfichier);
-			}while (annuaire==NULL);
-			etatfichier = 1;
-			
-		}
-		else
-		{
-			cpasfini=0;
-		}
-	}
-	else if (etatfichier == 1)
-	{
-		if (etatfichier == 2)
-			printf("Le fichier n'est pas sauvegarder\n");
-		printf("1) Ajouter un client\n");
-		printf("2) Modifier un client\n");
-		printf("3) Supprimer un client\n");
-		printf("4) Afficer tout les clients\n");
-		printf("5) Filtrer et afficher les clients\n");
-		printf("6) Sauvegarder le fichier\n");
-		printf("7) Fermer le fichier\n");
-		scanf("%d", &choix);
-		viderBuffer();
-		switch (choix) {
-			case 1:
-				annuaire=ajout_personne(annuaire);
-				etatfichier = 2;
-			break;
-		}
-	}
+  personne *annuaire = NULL;
+  int ligne, etat, cpasfini = 1, etatfichier = 0, choix;
+  char nomfichier[100];
+  while (cpasfini) {
+    if (etatfichier == 0) {
+      printf("Aucun fichier n'est ouvert, 1 pour ouvrir un fichier 2 pour "
+             "fermer :\n");
+      scanf("%d", &choix);
+      system("clear");
+      viderBuffer();
+      if (choix == 1) {
+        do {
+          printf("rentrer le nom du fichier à ouvrir :\n");
+          fgets(nomfichier, 100, stdin);
+          system("clear");
+          nomfichier[strlen(nomfichier) - 1] = '\0';
+          annuaire = ouvrir_fichier(nomfichier);
+        } while (annuaire == NULL);
+        etatfichier = 1;
 
-}
+      } else {
+        cpasfini = 0;
+      }
+    } else {
+      if (etatfichier == 2)
+        printf("Le fichier n'est pas sauvegarder\n");
+      printf("1) Ajouter un client\n");
+      printf("2) Modifier un client\n");
+      printf("3) Supprimer un client\n");
+      printf("4) Afficer tout les clients\n");
+      printf("5) Filtrer et afficher les clients\n");
+      printf("6) Sauvegarder le fichier\n");
+      printf("7) Fermer le fichier\n");
+      scanf("%d", &choix);
+      viderBuffer();
+      system("clear");
+
+      switch (choix) {
+      case 1:
+        annuaire = ajout_personne(annuaire);
+        etatfichier = 2;
+      break;
+      case 2:
+        modif_personne(annuaire);
+        etatfichier = 2;
+      break;
+      case 3:
+        annuaire = suppression_personne(annuaire);
+        etatfichier = 2;
+      break;
+      case 4:
+        afficher(annuaire, defaultpersonne);
+      break;
+      case 5:
+        afficher(annuaire, entrer_champs_personne());
+      break;
+      case 6:
+        savelefichier(annuaire);
+        etatfichier=1;
+      break;
+      case 7:
+        etatfichier = 0;
+        free(annuaire);
+      break;
+      default:
+      printf("nombre incorecte");
+      break;
+    }
+  }
+  }
   return 0;
 }
