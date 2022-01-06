@@ -1,3 +1,4 @@
+#include <endian.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -567,6 +568,7 @@ int main(void) {
       printf("5) Filtrer et afficher les clients\n");
       printf("6) Sauvegarder le fichier\n");
       printf("7) Fermer le fichier\n");
+      printf("8) Fermer le fichier\n");
       scanf("%d", &choix);
       viderBuffer();
       system("clear");
@@ -595,6 +597,12 @@ int main(void) {
         etatfichier=1;
       break;
       case 7:
+				printf("0 : prenom | 1 : nom | 2 : ville | 3 : code-postal | 4 : numéro | 5 : email | 6 : fonction ");
+				scanf("%d", &choix);
+				viderBuffer();
+				quicksort(annuaire, 0, nbligne-1, choix);	
+			break;
+      case 8:
         etatfichier = 0;
         free(annuaire);
       break;
