@@ -1,4 +1,4 @@
-
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +14,12 @@ void clrscr()
 
 personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
 { // Création d'une fonction qui à pour // butd'ouvrir perser un fichier csv
-  long c, j = 0, k = 0, field_count = 0, i = 0; //c sert à stocker les lettre pour compter le nombre de ligne, j correspond à l'avancement dans le buffer de la ligne, k correspond à l'emplacement d'écriture dans le tableau de structure, field_count est le numéro de variable qu'on écri(nom, prénom), i correspond au numéro de ligne
+  long j = 0, k = 0, field_count = 0, i = 0; //c sert à stocker les lettre pour compter le nombre de ligne, j correspond à l'avancement dans le buffer de la ligne, k correspond à l'emplacement d'écriture dans le tableau de structure, field_count est le numéro de variable qu'on écri(nom, prénom), i correspond au numéro de ligne
+  int c;
   char buff[1024]; // cette variable stocke la une ligne du fichier csv
+
+  clock_t start = clock();
+
   FILE *fp = fopen(nom_fichier, "r"); // ouvre le fichier donner par l'utilisateur en lecture
 
   if (!fp) //test si le pointeur du fichier est égal à null, si oui alors il y a eu un problème à l'ouverture
@@ -28,7 +32,7 @@ personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
     if (c == '\n') 
       *nbligne = *nbligne + 1;
   }
-  printf("*nbligne : %ld \n", *nbligne); // affiche pour l'utilisateur le nombre de ligne chargé
+  printf("nbligne : %ld \n", *nbligne); // affiche pour l'utilisateur le nombre de ligne chargé
   personne *values = NULL; //créé un pointeur null pour le tableau de sctruct
   values = malloc(sizeof(personne) * *nbligne); //allocation de la mémoire pour le tableau de struct pour ouvrir chargé et parser le fichier
   if (values == NULL) // vérifie si l'allocation de la mémoire à fonctionner
@@ -38,14 +42,14 @@ personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
   }
   fseek(fp, 0, SEEK_SET); //remet le pointeur du qui lis le fichier au début
 
-  while (fgets(buff, 1024, fp)) //cet boucle charge ch
+  while (fgets(buff, 1024, fp)) //cet boucle charge le fichier ligne par ligne de 1024 caractère max
   {
-    field_count = 0;
+    field_count = 0; 
     j = 0;
     k = 0;
-    while (buff[j] != '\n' && buff[j] != '\r' && buff[j] != EOF)
+    while (buff[j] != '\n' && buff[j] != '\r' && buff[j] != EOF) // tant que ce n'est pas la fin du fichier ou de la ligne, on continue de remplir la même ligne
     {
-      if (buff[j] == ',')
+      if (buff[j] == ',') //si c'est une virlgule on passe à l"élèment suivant et on met un \0 pour finir la string
       {
         if (field_count == 0)
         {
@@ -79,7 +83,7 @@ personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
         k = 0;
         field_count++;
       }
-      else
+      else //sinon il place le charactère à l'emplacement j du buffer pour le mettre dans l'emplacement j du champ de la ligne i
       {
         if (field_count == 0)
         {
@@ -109,46 +113,55 @@ personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
         {
           values[i].fonction[k] = buff[j];
         }
-        k++;
+        k++; //incrémente de 1 l'emplacement d'écriture dans la structure
       }
-      j++;
+      j++; //incrémente de 1 l'emplacement dans le buffer
     }
-    i++;
+    i++; //incrémente de 1 l'emplacement de ligne
   }
-  fclose(fp);
-  return values;
+  fclose(fp); //ferme le fichier pour libérer la mémoir
+  clock_t end = clock();
+
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("tps : %fs\n ",seconds);
+  return values; //retourne le pointeur du talbeau
 }
 
-void viderBuffer(void)
+void viderBuffer(void) //cette fonction permet de vider le buffer de stdin (généralement après un scanf)
 {
   long c;
-  while ((c = getchar()) != EOF && c != '\n')
+  while ((c = getchar()) != EOF && c != '\n') //la boucle récupère des charactère tant qu'il différent d'\n ou qu'il est vide
     ;
 }
 
-long savelefichier(personne *pelo, long *nbligne)
+long savelefichier(personne *tab, long *nbligne) //cette fonction permet de sauvegarder les modification dans le fichier
 {
-  long i = 0;
-  FILE *fw = fopen("annuaire5000.csv", "w");
-  if (!fw)
+  clock_t start = clock();
+  long i = 0; //initialisation d'une variable pour une boucle for
+  FILE *fw = fopen("annuaire5000.csv", "w"); //on ouvre le fichier en écriture
+  if (!fw) //test si on à pu ouvrir le fichier
   {
     printf("error fichier");
     return 1;
   }
-  for (i = 0; i < *nbligne; i++)
+  for (i = 0; i < *nbligne; i++) //une boucle qui vas print dans le fichier chaque ligne du tableau de struct
   {
-    fprintf(fw, "%s,%s,%s,%s,%s,%s,%s\n", pelo[i].prenom, pelo[i].nom,
-            pelo[i].ville, pelo[i].codepost, pelo[i].numtel, pelo[i].email,
-            pelo[i].fonction);
+    fprintf(fw, "%s,%s,%s,%s,%s,%s,%s\n", tab[i].prenom, tab[i].nom,
+            tab[i].ville, tab[i].codepost, tab[i].numtel, tab[i].email,
+            tab[i].fonction);
   }
-  fclose(fw);
+  fclose(fw); //ferme le fichier
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f s", seconds);
   return 0;
 }
 
-long afficher(personne *pelo, personne peloachercher, long *nbligne)
+long afficher(personne *tab, personne peloachercher, long *nbligne) //cette fonction permet d'afficher un tableau et de le filtrer avec une structure personnne, il existe une struct defaut qui permet de ne pas mettre de filtre
 {
-  long nblignepossible = 0, conteur = 1;
-  for (conteur = 0; conteur < 180; conteur++)
+  clock_t start = clock();
+  long nblignepossible = 0, conteur = 1; //variable utilisé pour l'affichage
+  for (conteur = 0; conteur < 180; conteur++) //les deux boucle for affiche le conteneur du tableau grâce au charactère ascii
     printf("_");
   printf("\n");
   printf("|%7s|%24s|%27s|%23s|%11s|%17s|%47s|%17s|\n", "ligne", "prenom", "nom",
@@ -163,31 +176,31 @@ long afficher(personne *pelo, personne peloachercher, long *nbligne)
       printf("_");
   }
   printf("\n");
-  for (long i = 0; i < *nbligne; i++)
+  for (long i = 0; i < *nbligne; i++) //cette boucle vérifie pour chaque ligne si tout les champ donné par l'utilisateur corresponde, 
   {
-    if ((strstr(pelo[i].prenom, peloachercher.prenom) != NULL ||
+    if ((strstr(tab[i].prenom, peloachercher.prenom) != NULL || //si l'utilisateur n'applique pas de filtre sur un champ alors le "=='\0'" permet de ne pas filtrer sur le champ
          peloachercher.prenom[0] == '\0') &&
-        (strstr(pelo[i].nom, peloachercher.nom) != NULL ||
+        (strstr(tab[i].nom, peloachercher.nom) != NULL ||
          peloachercher.nom[0] == '\0') &&
-        (strstr(pelo[i].ville, peloachercher.ville) != NULL ||
+        (strstr(tab[i].ville, peloachercher.ville) != NULL ||
          peloachercher.ville[0] == '\0') &&
-        (strstr(pelo[i].codepost, peloachercher.codepost) != NULL ||
+        (strstr(tab[i].codepost, peloachercher.codepost) != NULL ||
          peloachercher.codepost[0] == '\0') &&
-        (strstr(pelo[i].numtel, peloachercher.numtel) != NULL ||
+        (strstr(tab[i].numtel, peloachercher.numtel) != NULL ||
          peloachercher.numtel[0] == '\0') &&
-        (strstr(pelo[i].email, peloachercher.email) != NULL ||
+        (strstr(tab[i].email, peloachercher.email) != NULL ||
          peloachercher.email[0] == '\0') &&
-        (strstr(pelo[i].fonction, peloachercher.fonction) != NULL ||
+        (strstr(tab[i].fonction, peloachercher.fonction) != NULL ||
          peloachercher.fonction[0] == '\0'))
     {
-      printf("|%7ld|%24s|%27s|%23s|%11s|%15s|%47s|%17s|", i, pelo[i].prenom,
-             pelo[i].nom, pelo[i].ville, pelo[i].codepost, pelo[i].numtel,
-             pelo[i].email, pelo[i].fonction);
-      nblignepossible++;
+      printf("|%7ld|%24s|%27s|%23s|%11s|%15s|%47s|%17s|", i, tab[i].prenom, //si les critères coresponde alors la ligne du tableau est affiché
+             tab[i].nom, tab[i].ville, tab[i].codepost, tab[i].numtel,
+             tab[i].email, tab[i].fonction);
+      nblignepossible++; //permet de savoir si il y a un résultat
       printf("\n");
     }
   }
-  for (conteur = 0; conteur < 180; conteur++)
+  for (conteur = 0; conteur < 180; conteur++) //affiche le bas du contour du tableau
   {
     if (conteur == 0 || conteur == 179 || conteur == 8 || conteur == 33 ||
         conteur == 61 || conteur == 85 || conteur == 97 || conteur == 113 ||
@@ -197,26 +210,28 @@ long afficher(personne *pelo, personne peloachercher, long *nbligne)
       printf("_");
   }
   printf("\n");
-  if (!(nblignepossible))
+  if (!(nblignepossible)) //permet en fonction de si il y a un résultat ou nom de renvoyer un code différent
   {
     printf("Aucun résultat\n");
     return -1;
   }
   else
     return 0;
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f s", seconds);
 }
 
-personne entrer_champs_personne(void)
+personne entrer_champs_personne(void) //cette fonction permet de remplire une variable de structure personne de façon robuste
 {
-  long i, j, boole = 1, c;
-  char temp;
+  long i, j, boole = 1, c; 
   personne personnetemp;
   printf("Prenom : ");
   fgets(personnetemp.prenom, STRIN, stdin);
   personnetemp.prenom[strlen(personnetemp.prenom) - 1] = '\0';
-  if (personnetemp.prenom[0] < 123 && personnetemp.prenom[0] > 96)
-    personnetemp.prenom[0] = personnetemp.prenom[0] - 32;
-  for (i = 0; i < strlen(personnetemp.prenom); i++)
+  if (personnetemp.prenom[0] < 123 && personnetemp.prenom[0] > 96) //met la première lettre en maj si elle ne l'est pas
+    personnetemp.prenom[0] = personnetemp.prenom[0] - 32; 
+  for (i = 0; i < strlen(personnetemp.prenom); i++) //si il y a un espace dans la string la prochaine lettre est mise en maj si elle ne l'est pas
   {
     if (personnetemp.prenom[i] == '-' || personnetemp.prenom[i] == ' ')
       if (personnetemp.prenom[i + 1] < 123 && personnetemp.prenom[i + 1] > 96)
@@ -226,9 +241,9 @@ personne entrer_champs_personne(void)
   printf("Nom : ");
   fgets(personnetemp.nom, STRIN, stdin);
   personnetemp.nom[strlen(personnetemp.nom) - 1] = '\0';
-  if (personnetemp.nom[0] < 123 && personnetemp.nom[0] > 96)
+  if (personnetemp.nom[0] < 123 && personnetemp.nom[0] > 96) //met la première lettre en maj si elle ne l'est pas
     personnetemp.nom[0] = personnetemp.nom[0] - 32;
-  for (i = 0; i < strlen(personnetemp.nom); i++)
+  for (i = 0; i < strlen(personnetemp.nom); i++) //si il y a un espace dans la string la prochaine lettre est mise en maj si elle ne l'est pas
     if (personnetemp.nom[i] == '-' || personnetemp.nom[i] == ' ')
       if (personnetemp.nom[i + 1] < 123 && personnetemp.nom[i + 1] > 96)
         personnetemp.nom[i + 1] = personnetemp.nom[i + 1] - 32;
@@ -236,7 +251,7 @@ personne entrer_champs_personne(void)
   printf("Ville : ");
   fgets(personnetemp.ville, STRIN, stdin);
   personnetemp.ville[strlen(personnetemp.ville) - 1] = '\0';
-  for (i = 0; i < strlen(personnetemp.ville); i++)
+  for (i = 0; i < strlen(personnetemp.ville); i++) //met toute les lettres en maj
     if (personnetemp.ville[i] < 123 && personnetemp.ville[i] > 96)
       personnetemp.ville[i] = personnetemp.ville[i] - 32;
 
@@ -290,21 +305,21 @@ personne entrer_champs_personne(void)
   return personnetemp;
 }
 
-long filtre(personne *pelo, long *nbligne)
+long filtre(personne *tab, long *nbligne)
 {
   personne peloachercher;
   printf("Insérer du texte pour filtrer et appuyer sur entrer, appuyer juste "
          "sur entrer pour ne pas mettre de filtre\n");
   peloachercher = entrer_champs_personne();
-  return afficher(pelo, peloachercher, nbligne);
+  return afficher(tab, peloachercher, nbligne);
 }
 
-long selecligne(personne *pelo, long *nbligne)
+long selecligne(personne *tab, long *nbligne)
 {
   long numligne_a_selec = -2;
   while (numligne_a_selec == -2)
   {
-    numligne_a_selec = filtre(pelo, nbligne);
+    numligne_a_selec = filtre(tab, nbligne);
     if (numligne_a_selec == -1)
     {
       do
@@ -338,7 +353,7 @@ long selecligne(personne *pelo, long *nbligne)
   return numligne_a_selec;
 }
 
-void quicksort(personne *pelo, long first, long last, int type_info)
+void quicksort(personne *tab, long first, long last, int type_info)
 {
   long i, j, pivot;
   personne temp;
@@ -353,23 +368,23 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].prenom, pelo[pivot].prenom) <= 0) && i < last)
+        while ((strcmp(tab[i].prenom, tab[pivot].prenom) <= 0) && i < last)
           i++;
-        while (strcmp(pelo[j].prenom, pelo[pivot].prenom) > 0)
+        while (strcmp(tab[j].prenom, tab[pivot].prenom) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   case 1:
@@ -381,23 +396,23 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].nom, pelo[pivot].nom) <= 0) && i < last)
+        while ((strcmp(tab[i].nom, tab[pivot].nom) <= 0) && i < last)
           i++;
-        while (strcmp(pelo[j].nom, pelo[pivot].nom) > 0)
+        while (strcmp(tab[j].nom, tab[pivot].nom) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   case 2:
@@ -409,23 +424,23 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].ville, pelo[pivot].ville) <= 0) && i < last)
+        while ((strcmp(tab[i].ville, tab[pivot].ville) <= 0) && i < last)
           i++;
-        while (strcmp(pelo[j].ville, pelo[pivot].ville) > 0)
+        while (strcmp(tab[j].ville, tab[pivot].ville) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   case 3:
@@ -437,24 +452,24 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].codepost, pelo[pivot].codepost) <= 0) &&
+        while ((strcmp(tab[i].codepost, tab[pivot].codepost) <= 0) &&
                i < last)
           i++;
-        while (strcmp(pelo[j].codepost, pelo[pivot].codepost) > 0)
+        while (strcmp(tab[j].codepost, tab[pivot].codepost) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   case 4:
@@ -466,23 +481,23 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].numtel, pelo[pivot].numtel) <= 0) && i < last)
+        while ((strcmp(tab[i].numtel, tab[pivot].numtel) <= 0) && i < last)
           i++;
-        while (strcmp(pelo[j].numtel, pelo[pivot].numtel) > 0)
+        while (strcmp(tab[j].numtel, tab[pivot].numtel) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   case 5:
@@ -494,23 +509,23 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].email, pelo[pivot].email) <= 0) && i < last)
+        while ((strcmp(tab[i].email, tab[pivot].email) <= 0) && i < last)
           i++;
-        while (strcmp(pelo[j].email, pelo[pivot].email) > 0)
+        while (strcmp(tab[j].email, tab[pivot].email) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   case 6:
@@ -522,51 +537,55 @@ void quicksort(personne *pelo, long first, long last, int type_info)
 
       while (i < j)
       {
-        while ((strcmp(pelo[i].fonction, pelo[pivot].fonction) <= 0) &&
+        while ((strcmp(tab[i].fonction, tab[pivot].fonction) <= 0) &&
                i < last)
           i++;
-        while (strcmp(pelo[j].fonction, pelo[pivot].fonction) > 0)
+        while (strcmp(tab[j].fonction, tab[pivot].fonction) > 0)
           j--;
         if (i < j)
         {
-          temp = pelo[i];
-          pelo[i] = pelo[j];
-          pelo[j] = temp;
+          temp = tab[i];
+          tab[i] = tab[j];
+          tab[j] = temp;
         }
       }
 
-      temp = pelo[pivot];
-      pelo[pivot] = pelo[j];
-      pelo[j] = temp;
-      quicksort(pelo, first, j - 1, 0);
-      quicksort(pelo, j + 1, last, 0);
+      temp = tab[pivot];
+      tab[pivot] = tab[j];
+      tab[j] = temp;
+      quicksort(tab, first, j - 1, type_info);
+      quicksort(tab, j + 1, last, type_info);
     }
     break;
   }
 }
 
-void modif_personne(personne *pelo,long *nbligne)
+void modif_personne(personne *tab,long *nbligne)
 {
   long ligne_selec;
-  ligne_selec = selecligne(pelo, nbligne);
+  ligne_selec = selecligne(tab, nbligne);
   if (ligne_selec == -1)
     exit(-1);
   personne personne_a_modifier = entrer_champs_personne();
+  clock_t start = clock();
   if (personne_a_modifier.prenom[0] != '\0')
-    strcpy(pelo[ligne_selec].prenom, personne_a_modifier.prenom);
+    strcpy(tab[ligne_selec].prenom, personne_a_modifier.prenom);
   if (personne_a_modifier.nom[0] != '\0')
-    strcpy(pelo[ligne_selec].nom, personne_a_modifier.nom);
+    strcpy(tab[ligne_selec].nom, personne_a_modifier.nom);
   if (personne_a_modifier.ville[0] != '\0')
-    strcpy(pelo[ligne_selec].ville, personne_a_modifier.ville);
+    strcpy(tab[ligne_selec].ville, personne_a_modifier.ville);
   if (personne_a_modifier.codepost[0] != '\0')
-    strcpy(pelo[ligne_selec].codepost, personne_a_modifier.codepost);
+    strcpy(tab[ligne_selec].codepost, personne_a_modifier.codepost);
   if (personne_a_modifier.numtel[0] != '\0')
-    strcpy(pelo[ligne_selec].numtel, personne_a_modifier.numtel);
+    strcpy(tab[ligne_selec].numtel, personne_a_modifier.numtel);
   if (personne_a_modifier.email[0] != '\0')
-    strcpy(pelo[ligne_selec].email, personne_a_modifier.email);
+    strcpy(tab[ligne_selec].email, personne_a_modifier.email);
   if (personne_a_modifier.fonction[0] != '\0')
-    strcpy(pelo[ligne_selec].fonction, personne_a_modifier.fonction);
+    strcpy(tab[ligne_selec].fonction, personne_a_modifier.fonction);
   printf("La ligne à été modifié\n");
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f s", seconds);
 }
 
 personne *ajout_personne(personne *ligne, long *nbligne)
@@ -575,6 +594,7 @@ personne *ajout_personne(personne *ligne, long *nbligne)
   printf("Saisisser les information et appuyer sur entrer, appuyer juste sur "
          "entrer pour ne pas mettre d'information\n");
   personne_a_ajouter = entrer_champs_personne();
+  clock_t start = clock();
   ligne = realloc(ligne, sizeof(personne) * *nbligne + sizeof(personne));
   if (!ligne)
   {
@@ -583,6 +603,9 @@ personne *ajout_personne(personne *ligne, long *nbligne)
   }
   (*nbligne)++;
   ligne[*nbligne - 1] = personne_a_ajouter;
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f s", seconds);
   return ligne;
 }
 
@@ -592,6 +615,7 @@ personne *suppression_personne(personne *ligne, long *nbligne)
   printf("Saisisser les information de la personne à supprimer et appuyer sur "
          "entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
   ligne_selec = selecligne(ligne, nbligne);
+  clock_t start = clock();
   if (ligne_selec == -1)
   {
     printf("aucune ligne selectionné");
@@ -609,5 +633,56 @@ personne *suppression_personne(personne *ligne, long *nbligne)
     exit(-1);
   }
   (*nbligne)--;
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f s", seconds);
   return ligne;
+}
+
+
+void info_manquante(personne *tab,long *nbligne)
+{
+  clock_t start = clock();
+  long i, nblignevide = 0, conteur = 1;
+  for (conteur = 0; conteur < 180; conteur++) //les deux boucle for affiche le conteneur du tableau grâce au charactère ascii
+    printf("_");
+  printf("\n");
+  printf("|%7s|%24s|%27s|%23s|%11s|%17s|%47s|%17s|\n", "ligne", "prenom", "nom",
+         "ville", "code postal", "téléphone", "email", "fonction");
+  for (conteur = 0; conteur < 180; conteur++)
+  {
+    if (conteur == 0 || conteur == 179 || conteur == 8 || conteur == 33 ||
+        conteur == 61 || conteur == 85 || conteur == 97 || conteur == 113 ||
+        conteur == 161)
+      printf("|");
+    else
+      printf("_");
+  }
+  printf("\n");
+    for (long i = 0; i < *nbligne; i++) //cette boucle vérifie pour chaque ligne si tout les champ donné par l'utilisateur corresponde, 
+  {
+    if (tab[i].prenom[0] == '\0' || tab[i].nom[0] == '\0' || tab[i].ville[0] == '\0' || tab[i].codepost[0] == '\0' || tab[i].numtel[0] == '\0' || tab[i].email[0] == '\0' || tab[i].fonction[0] == '\0')
+    {
+      printf("|%7ld|%24s|%27s|%23s|%11s|%15s|%47s|%17s|", i, tab[i].prenom, //si les critères coresponde alors la ligne du tableau est affiché
+             tab[i].nom, tab[i].ville, tab[i].codepost, tab[i].numtel,
+             tab[i].email, tab[i].fonction);
+      nblignevide++; //permet de savoir si il y a un résultat
+      printf("\n");
+    }
+  }
+  for (conteur = 0; conteur < 180; conteur++) //affiche le bas du contour du tableau
+  {
+    if (conteur == 0 || conteur == 179 || conteur == 8 || conteur == 33 ||
+        conteur == 61 || conteur == 85 || conteur == 97 || conteur == 113 ||
+        conteur == 161)
+      printf("|");
+    else
+      printf("_");
+  }
+  printf("\n");
+
+  printf("Il y a %ld ligne avec des informations manquantes", nblignevide);
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f s", seconds);
 }

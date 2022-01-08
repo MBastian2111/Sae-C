@@ -3,4 +3,4 @@ main.o:main.c fonction.h
 fonction.o:fonction.c fonction.h
 	gcc -g -c fonction.c
 all:main.o fonction.o
-	gcc -g main.o fonction.o -o annuairedecmorts
+	gcc -g main.o fonction.o -o annuaire_sae

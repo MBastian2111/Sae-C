@@ -1,4 +1,4 @@
-
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,11 +48,12 @@ int main(void)
       printf("1) Ajouter un client\n");
       printf("2) Modifier un client\n");
       printf("3) Supprimer un client\n");
-      printf("4) Afficer tout les clients\n");
+      printf("4) Afficher tout les clients\n");
       printf("5) Filtrer et afficher les clients\n");
       printf("6) Sauvegarder le fichier\n");
       printf("7) Trier le fichier\n");
-      printf("8) Fermer le fichier\n");
+      printf("8) Afficher les ligne avec des information manquante\n");
+      printf("9) Fermer le fichier\n");
       scanf("%d", &choix);
       viderBuffer();
       clrscr();
@@ -85,14 +86,21 @@ int main(void)
         printf("0 : prenom | 1 : nom | 2 : ville | 3 : code-postal | 4 : numéro | 5 : email | 6 : fonction ");
         scanf("%d", &choix);
         viderBuffer();
+        clock_t start = clock();
         quicksort(annuaire, 0, nbligne - 1, choix);
+        clock_t end = clock();
+        float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+        printf("%f s", seconds);
         break;
       case 8:
+        info_manquante(annuaire, &nbligne);
+        break;
+      case 9:
         etatfichier = 0;
         free(annuaire);
         break;
       default:
-        printf("nombre incorecte");
+        printf("nombre incorect");
         break;
       }
     }

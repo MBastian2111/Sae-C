@@ -39,4 +39,6 @@ personne *suppression_personne(personne *, long*);
 
 void clrscr();
 
+void info_manquante(personne *,long *);
+
 #endif 
