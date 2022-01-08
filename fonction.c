@@ -259,7 +259,7 @@ personne entrer_champs_personne(void) //cette fonction permet de remplire une va
   {
     i = 0;
     printf("Code Postal : ");
-    fgets(personnetemp.codepost, VSSTRIN, stdin);
+    fgets(personnetemp.codepost, VSSTRIN, stdin); //Le programme va vérifier si c'est un code postal, il doit être complet
     while (personnetemp.codepost[i] != '\n')
       i++;
     personnetemp.codepost[i] = '\0';
@@ -281,7 +281,7 @@ personne entrer_champs_personne(void) //cette fonction permet de remplire une va
       }
     }
   } while (!boole);
-  printf("Numéro de téléphone : ");
+  printf("Numéro de téléphone : "); //Cette partie permet de mettre les '.' dans la string et déplacer les caractères
   fgets(personnetemp.numtel, SSTRIN, stdin);
   personnetemp.numtel[strlen(personnetemp.numtel) - 1] = '\0';
   if (personnetemp.numtel[0] != 0)
@@ -296,30 +296,30 @@ personne entrer_champs_personne(void) //cette fonction permet de remplire une va
       }
     }
   }
-  printf("E-mail : ");
+  printf("E-mail : "); 
   fgets(personnetemp.email, LSTRIN, stdin);
   personnetemp.email[strlen(personnetemp.email) - 1] = '\0';
   printf("Fonction : ");
   fgets(personnetemp.fonction, STRIN, stdin);
   personnetemp.fonction[strlen(personnetemp.fonction) - 1] = '\0';
-  return personnetemp;
+  return personnetemp; //le programme renvoie la variable comptenant les différents champs
 }
 
-long filtre(personne *tab, long *nbligne)
+long filtre(personne *tab, long *nbligne) //cette fonction permet de lancer la fonction affichage avec un filtre 
 {
   personne peloachercher;
   printf("Insérer du texte pour filtrer et appuyer sur entrer, appuyer juste "
          "sur entrer pour ne pas mettre de filtre\n");
-  peloachercher = entrer_champs_personne();
-  return afficher(tab, peloachercher, nbligne);
+  peloachercher = entrer_champs_personne(); //prend une variable personnne
+  return afficher(tab, peloachercher, nbligne); //quelle donne ensuite à la fonction afficher
 }
 
-long selecligne(personne *tab, long *nbligne)
+long selecligne(personne *tab, long *nbligne) //cette fonction permet à l'utilisateur de sélectionner une ligne
 {
-  long numligne_a_selec = -2;
-  while (numligne_a_selec == -2)
+  long numligne_a_selec = -2; 
+  while (numligne_a_selec == -2) //tant que l'utilisateur n'annule pas ou ne valide pas une ligne alors il continue faire la recherche d'une ligne
   {
-    numligne_a_selec = filtre(tab, nbligne);
+    numligne_a_selec = filtre(tab, nbligne); // Le programme affiche le tableau avec un trie pour que l'utilisateur sache quelle ligne selectionner
     if (numligne_a_selec == -1)
     {
       do
@@ -353,7 +353,7 @@ long selecligne(personne *tab, long *nbligne)
   return numligne_a_selec;
 }
 
-void quicksort(personne *tab, long first, long last, int type_info)
+void quicksort(personne *tab, long first, long last, int type_info) //fonction de tri rapide trouver sur internet(https://waytolearnx.com/2019/08/tri-rapide-en-c.html) et adapteur pour pouvoir trier sur n'importe quel champ 
 {
   long i, j, pivot;
   personne temp;
@@ -560,15 +560,15 @@ void quicksort(personne *tab, long first, long last, int type_info)
   }
 }
 
-void modif_personne(personne *tab,long *nbligne)
+void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifier une ligne du tableau
 {
   long ligne_selec;
-  ligne_selec = selecligne(tab, nbligne);
+  ligne_selec = selecligne(tab, nbligne); //elle récupère le numéro de ligne à modifier
   if (ligne_selec == -1)
     exit(-1);
-  personne personne_a_modifier = entrer_champs_personne();
+  personne personne_a_modifier = entrer_champs_personne(); //elle récupère les nouvelles infos avec la fonction entrer_champs_personne
   clock_t start = clock();
-  if (personne_a_modifier.prenom[0] != '\0')
+  if (personne_a_modifier.prenom[0] != '\0') //si l'utilisateur à rentrer une info alors il la copie dans dans le champ de la ligne selectionné
     strcpy(tab[ligne_selec].prenom, personne_a_modifier.prenom);
   if (personne_a_modifier.nom[0] != '\0')
     strcpy(tab[ligne_selec].nom, personne_a_modifier.nom);
@@ -588,55 +588,53 @@ void modif_personne(personne *tab,long *nbligne)
   printf("%f s", seconds);
 }
 
-personne *ajout_personne(personne *ligne, long *nbligne)
+personne *ajout_personne(personne *ligne, long *nbligne) //cette fonction augmente la taille du tableau et rajoute des information sur la nouvelle ligne
 {
   personne personne_a_ajouter;
   printf("Saisisser les information et appuyer sur entrer, appuyer juste sur "
          "entrer pour ne pas mettre d'information\n");
-  personne_a_ajouter = entrer_champs_personne();
+  personne_a_ajouter = entrer_champs_personne(); //on recupère les nouvelles info
   clock_t start = clock();
-  ligne = realloc(ligne, sizeof(personne) * *nbligne + sizeof(personne));
+  ligne = realloc(ligne, sizeof(personne) * (*nbligne) + sizeof(personne)); //on réalloue de la mémoire pour la nouvelle ligne
   if (!ligne)
   {
     printf("Ram de ses morts");
     exit(-1);
   }
-  (*nbligne)++;
-  ligne[*nbligne - 1] = personne_a_ajouter;
+  (*nbligne)++; //on augmente le nombre de ligne
+  ligne[*nbligne - 1] = personne_a_ajouter; // on place les info dans la nouvelle ligne
   clock_t end = clock();
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
   printf("%f s", seconds);
-  return ligne;
+  return ligne; //on retourne l'emplacement du tableau vu qu'il a été changé avec maloc
 }
 
-personne *suppression_personne(personne *ligne, long *nbligne)
+personne *suppression_personne(personne *ligne, long *nbligne) //cette fonction diminue la taille du tableau et supprime une ligne
 {
   long ligne_selec, i;
   printf("Saisisser les information de la personne à supprimer et appuyer sur "
          "entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
-  ligne_selec = selecligne(ligne, nbligne);
+  ligne_selec = selecligne(ligne, nbligne); //on selectionne une ligne
   clock_t start = clock();
   if (ligne_selec == -1)
   {
     printf("aucune ligne selectionné");
     return ligne;
   }
-  printf("Ram de ses morts");
-  for (i = ligne_selec; i < *nbligne; i++)
+  for (i = ligne_selec; i < *nbligne; i++) //on écrase la ligne en décalant toute les ligne
   {
     ligne[i] = ligne[i + 1];
   }
-  ligne = realloc(ligne, sizeof(personne) * *nbligne - sizeof(personne));
+  ligne = realloc(ligne, sizeof(personne) * (*nbligne) - sizeof(personne)); //on réalloue l'espace pour le tableau mais avec une ligne de moins
   if (!ligne)
   {
-    printf("Ram de ses morts");
     exit(-1);
   }
   (*nbligne)--;
   clock_t end = clock();
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
   printf("%f s", seconds);
-  return ligne;
+  return ligne; // on renvoie l'adresse ddu tableau
 }
 
 
