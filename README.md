@@ -10,3 +10,5 @@ j'ai mis en place un makefile pour compiler les deux fichier c en .o pour qu'il 
 
 Ce programme est compatible linux et windows (et peux être macos je n'ai pas d'environement pour le tester).
 
+Voici le lien du gitlab :
+https://forge.univ-lyon1.fr/p2101274/projet-sae-c
