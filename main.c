@@ -8,34 +8,34 @@ personne defaultpersonne = {'\0', '\0', '\0', '\0','\0', '\0', '\0'}; // Créati
 
 
 
-int main(void)
+int main(void) // Bastian Mounier
 {
   long nbligne = 0;
   personne *annuaire = NULL;
-  long ligne, etat, cpasfini = 1, etatfichier = 0;
-  int choix;
-  char nomfichier[100];
-  while (cpasfini)
+  long ligne, cpasfini = 1; // Cpasfini fait tourner le programme à l'infini
+  int choix,etatfichier = 0; //variable pour stocker l'input du user, si le fichier est ouvert et si le fichier est sauvegardé
+  char nomfichier[100]; //pour que l'utilisateur rentre le nom du fichier
+  while (cpasfini) //boucle pour faire tourner le programme
   {
-    if (etatfichier == 0)
+    if (etatfichier == 0) //fichier pas ouvert
     {
       do
       {
         printf("Aucun fichier n'est ouvert, entrer le nom du fichier pour ouvrir ou juste sur entrer pour fermer le programme :\n");
         fgets(nomfichier, 100, stdin);
-        clrscr();
-        if(nomfichier[0]=='\n')
+        clrscr(); //fonction qui permet d'éffacer le terminal
+        if(nomfichier[0]=='\n') // l'utilisateur à appuyer sur entrer pour fermer le programme
         {
-          return 0;
+          return 0; //fin du programme
         }
-        nomfichier[strlen(nomfichier) - 1] = '\0';
+        nomfichier[strlen(nomfichier) - 1] = '\0'; //remplace l'\n par un \0
         annuaire = ouvrir_fichier(nomfichier, &nbligne);
-      } while (annuaire == NULL);
-        etatfichier = 1;
-      
+      } while (annuaire == NULL); //detecter si l'ouverture à fonctionné
+        etatfichier = 1; // change l'état de du fichier
     }
+    else //si le fichier est ouvert, il affiche le menu
     {
-      if (etatfichier == 2)
+      if (etatfichier == 2) //si l'état du fichier est = à 2 alors il prévient l'utilisateur que le fichier n'est pas sauvgarder
         printf("Le fichier n'est pas sauvegarder\n");
       printf("1) Ajouter un client\n");
       printf("2) Modifier un client\n");
@@ -47,10 +47,10 @@ int main(void)
       printf("8) Afficher les ligne avec des information manquante\n");
       printf("9) Fermer le fichier\n");
       scanf("%d", &choix);
-      viderBuffer();
+      viderBuffer(); //vide \n du scanf dans le buffer
       clrscr();
 
-      switch (choix)
+      switch (choix) //switch case qui vas éxecuter la fonction demander par utilisateur, change l'état du fichier si le fichier est modifié
       {
       case 1:
         annuaire = ajout_personne(annuaire, &nbligne);
@@ -75,7 +75,7 @@ int main(void)
         etatfichier = 1;
         break;
       case 7:
-        printf("0 : prenom | 1 : nom | 2 : ville | 3 : code-postal | 4 : numéro | 5 : email | 6 : fonction ");
+        printf("0 : prenom | 1 : nom | 2 : ville | 3 : code-postal | 4 : numéro | 5 : email | 6 : fonction "); //demande quel trie tu veux
         scanf("%d", &choix);
         viderBuffer();
         clock_t start = clock();
@@ -97,5 +97,4 @@ int main(void)
       }
     }
   }
-  return 0;
 }

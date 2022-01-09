@@ -7,12 +7,12 @@
  // Création d'une personne vide pour pouvoir une valeur par défaut sur certainnes fonction
 
 
-void clrscr()
+void clrscr() //https://stackoverflow.com/a/33992073
 {
     system("@cls||clear");
 }
 
-personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
+personne *ouvrir_fichier(char *nom_fichier, long *nbligne) //Jérémie Vernay
 { // Création d'une fonction qui à pour // butd'ouvrir perser un fichier csv
   long j = 0, k = 0, field_count = 0, i = 0; //c sert à stocker les lettre pour compter le nombre de ligne, j correspond à l'avancement dans le buffer de la ligne, k correspond à l'emplacement d'écriture dans le tableau de structure, field_count est le numéro de variable qu'on écri(nom, prénom), i correspond au numéro de ligne
   int c;
@@ -127,14 +127,14 @@ personne *ouvrir_fichier(char *nom_fichier, long *nbligne)
   return values; //retourne le pointeur du talbeau
 }
 
-void viderBuffer(void) //cette fonction permet de vider le buffer de stdin (généralement après un scanf)
+void viderBuffer(void) //cette fonction permet de vider le buffer de stdin (généralement après un scanf) /Jérémie Vernay
 {
   long c;
   while ((c = getchar()) != EOF && c != '\n') //la boucle récupère des charactère tant qu'il différent d'\n ou qu'il est vide
     ;
 }
 
-long savelefichier(personne *tab, long *nbligne) //cette fonction permet de sauvegarder les modification dans le fichier
+long savelefichier(personne *tab, long *nbligne) //cette fonction permet de sauvegarder les modification dans le fichier /Jérémie Vernay
 {
   clock_t start = clock();
   long i = 0; //initialisation d'une variable pour une boucle for
@@ -157,7 +157,7 @@ long savelefichier(personne *tab, long *nbligne) //cette fonction permet de sauv
   return 0;
 }
 
-long afficher(personne *tab, personne peloachercher, long *nbligne) //cette fonction permet d'afficher un tableau et de le filtrer avec une structure personnne, il existe une struct defaut qui permet de ne pas mettre de filtre
+long afficher(personne *tab, personne peloachercher, long *nbligne) //cette fonction permet d'afficher un tableau et de le filtrer avec une structure personnne, il existe une struct defaut qui permet de ne pas mettre de filtre /Jérémie Vernay
 {
   clock_t start = clock();
   long nblignepossible = 0, conteur = 1; //variable utilisé pour l'affichage
@@ -222,7 +222,7 @@ long afficher(personne *tab, personne peloachercher, long *nbligne) //cette fonc
   printf("%f s", seconds);
 }
 
-personne entrer_champs_personne(void) //cette fonction permet de remplire une variable de structure personne de façon robuste
+personne entrer_champs_personne(void) //cette fonction permet de remplire une variable de structure personne de façon robuste /Jérémie Vernay
 {
   long i, j, boole = 1, c; 
   personne personnetemp;
@@ -305,7 +305,7 @@ personne entrer_champs_personne(void) //cette fonction permet de remplire une va
   return personnetemp; //le programme renvoie la variable comptenant les différents champs
 }
 
-long filtre(personne *tab, long *nbligne) //cette fonction permet de lancer la fonction affichage avec un filtre 
+long filtre(personne *tab, long *nbligne) //cette fonction permet de lancer la fonction affichage avec un filtre /Jérémie Vernay
 {
   personne peloachercher;
   printf("Insérer du texte pour filtrer et appuyer sur entrer, appuyer juste "
@@ -314,7 +314,7 @@ long filtre(personne *tab, long *nbligne) //cette fonction permet de lancer la f
   return afficher(tab, peloachercher, nbligne); //quelle donne ensuite à la fonction afficher
 }
 
-long selecligne(personne *tab, long *nbligne) //cette fonction permet à l'utilisateur de sélectionner une ligne
+long selecligne(personne *tab, long *nbligne) //cette fonction permet à l'utilisateur de sélectionner une ligne /Jérémie Vernay
 {
   long numligne_a_selec = -2; 
   while (numligne_a_selec == -2) //tant que l'utilisateur n'annule pas ou ne valide pas une ligne alors il continue faire la recherche d'une ligne
@@ -353,7 +353,7 @@ long selecligne(personne *tab, long *nbligne) //cette fonction permet à l'utili
   return numligne_a_selec;
 }
 
-void quicksort(personne *tab, long first, long last, int type_info) //fonction de tri rapide trouver sur internet(https://waytolearnx.com/2019/08/tri-rapide-en-c.html) et adapteur pour pouvoir trier sur n'importe quel champ 
+void quicksort(personne *tab, long first, long last, int type_info) //fonction de tri rapide trouver sur internet(https://waytolearnx.com/2019/08/tri-rapide-en-c.html) et adapteur pour pouvoir trier sur n'importe quel champ /Jérémie Vernay
 {
   long i, j, pivot;
   personne temp;
@@ -560,7 +560,7 @@ void quicksort(personne *tab, long first, long last, int type_info) //fonction d
   }
 }
 
-void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifier une ligne du tableau
+void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifier une ligne du tableau /Jérémie Vernay
 {
   long ligne_selec;
   ligne_selec = selecligne(tab, nbligne); //elle récupère le numéro de ligne à modifier
@@ -588,7 +588,7 @@ void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifie
   printf("%f s", seconds);
 }
 
-personne *ajout_personne(personne *tab, long *nbligne) //cette fonction augmente la taille du tableau et rajoute des information sur la nouvelle ligne
+personne *ajout_personne(personne *tab, long *nbligne) //cette fonction augmente la taille du tableau et rajoute des information sur la nouvelle ligne /Jérémie Vernay
 {
   personne personne_a_ajouter;
   printf("Saisisser les information et appuyer sur entrer, appuyer juste sur "
@@ -609,7 +609,7 @@ personne *ajout_personne(personne *tab, long *nbligne) //cette fonction augmente
   return tab; //on retourne l'emplacement du tableau vu qu'il a été changé avec maloc
 }
 
-personne *suppression_personne(personne *tab, long *nbligne) //cette fonction diminue la taille du tableau et supprime une ligne
+personne *suppression_personne(personne *tab, long *nbligne) //cette fonction diminue la taille du tableau et supprime une ligne /Jérémie Vernay
 {
   long ligne_selec, i;
   printf("Saisisser les information de la personne à supprimer et appuyer sur "
@@ -637,8 +637,7 @@ personne *suppression_personne(personne *tab, long *nbligne) //cette fonction di
   return tab; // on renvoie l'adresse ddu tableau
 }
 
-
-void info_manquante(personne *tab,long *nbligne)
+void info_manquante(personne *tab,long *nbligne) //Jérémie Vernay
 {
   clock_t start = clock();
   long i, nblignevide = 0, conteur = 1;
