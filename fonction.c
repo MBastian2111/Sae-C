@@ -588,45 +588,45 @@ void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifie
   printf("%f s", seconds);
 }
 
-personne *ajout_personne(personne *ligne, long *nbligne) //cette fonction augmente la taille du tableau et rajoute des information sur la nouvelle ligne
+personne *ajout_personne(personne *tab, long *nbligne) //cette fonction augmente la taille du tableau et rajoute des information sur la nouvelle ligne
 {
   personne personne_a_ajouter;
   printf("Saisisser les information et appuyer sur entrer, appuyer juste sur "
          "entrer pour ne pas mettre d'information\n");
   personne_a_ajouter = entrer_champs_personne(); //on recupère les nouvelles info
   clock_t start = clock();
-  ligne = realloc(ligne, sizeof(personne) * (*nbligne) + sizeof(personne)); //on réalloue de la mémoire pour la nouvelle ligne
-  if (!ligne)
+  tab = realloc(tab, sizeof(personne) * (*nbligne) + sizeof(personne)); //on réalloue de la mémoire pour la nouvelle ligne
+  if (!tab)
   {
     printf("Ram de ses morts");
     exit(-1);
   }
   (*nbligne)++; //on augmente le nombre de ligne
-  ligne[*nbligne - 1] = personne_a_ajouter; // on place les info dans la nouvelle ligne
+  tab[*nbligne - 1] = personne_a_ajouter; // on place les info dans la nouvelle ligne
   clock_t end = clock();
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
   printf("%f s", seconds);
-  return ligne; //on retourne l'emplacement du tableau vu qu'il a été changé avec maloc
+  return tab; //on retourne l'emplacement du tableau vu qu'il a été changé avec maloc
 }
 
-personne *suppression_personne(personne *ligne, long *nbligne) //cette fonction diminue la taille du tableau et supprime une ligne
+personne *suppression_personne(personne *tab, long *nbligne) //cette fonction diminue la taille du tableau et supprime une ligne
 {
   long ligne_selec, i;
   printf("Saisisser les information de la personne à supprimer et appuyer sur "
          "entrer, appuyer juste sur entrer pour ne pas mettre d'information\n");
-  ligne_selec = selecligne(ligne, nbligne); //on selectionne une ligne
+  ligne_selec = selecligne(tab, nbligne); //on selectionne une ligne
   clock_t start = clock();
   if (ligne_selec == -1)
   {
     printf("aucune ligne selectionné");
-    return ligne;
+    return tab;
   }
   for (i = ligne_selec; i < *nbligne; i++) //on écrase la ligne en décalant toute les ligne
   {
-    ligne[i] = ligne[i + 1];
+    tab[i] = tab[i + 1];
   }
-  ligne = realloc(ligne, sizeof(personne) * (*nbligne) - sizeof(personne)); //on réalloue l'espace pour le tableau mais avec une ligne de moins
-  if (!ligne)
+  tab = realloc(tab, sizeof(personne) * (*nbligne) - sizeof(personne)); //on réalloue l'espace pour le tableau mais avec une ligne de moins
+  if (!tab)
   {
     exit(-1);
   }
@@ -634,7 +634,7 @@ personne *suppression_personne(personne *ligne, long *nbligne) //cette fonction 
   clock_t end = clock();
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
   printf("%f s", seconds);
-  return ligne; // on renvoie l'adresse ddu tableau
+  return tab; // on renvoie l'adresse ddu tableau
 }
 
 

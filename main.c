@@ -19,29 +19,21 @@ int main(void)
   {
     if (etatfichier == 0)
     {
-      printf("Aucun fichier n'est ouvert, 1 pour ouvrir un fichier 2 pour "
-             "fermer :\n");
-      scanf("%d", &choix);
-      clrscr();
-      viderBuffer();
-      if (choix == 1)
+      do
       {
-        do
+        printf("Aucun fichier n'est ouvert, entrer le nom du fichier pour ouvrir ou juste sur entrer pour fermer le programme :\n");
+        fgets(nomfichier, 100, stdin);
+        clrscr();
+        if(nomfichier[0]=='\n')
         {
-          printf("rentrer le nom du fichier à ouvrir :\n");
-          fgets(nomfichier, 100, stdin);
-          clrscr();
-          nomfichier[strlen(nomfichier) - 1] = '\0';
-          annuaire = ouvrir_fichier(nomfichier, &nbligne);
-        } while (annuaire == NULL);
+          return 0;
+        }
+        nomfichier[strlen(nomfichier) - 1] = '\0';
+        annuaire = ouvrir_fichier(nomfichier, &nbligne);
+      } while (annuaire == NULL);
         etatfichier = 1;
-      }
-      else
-      {
-        cpasfini = 0;
-      }
+      
     }
-    else
     {
       if (etatfichier == 2)
         printf("Le fichier n'est pas sauvegarder\n");
