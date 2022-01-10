@@ -7,7 +7,7 @@
  // Création d'une personne vide pour pouvoir une valeur par défaut sur certainnes fonction
 
 
-void clrscr() //https://stackoverflow.com/a/33992073
+void clrscr() //https://stackoverflow.com/a/33992073 /Bastian Mounier
 {
     system("@cls||clear");
 }
@@ -127,7 +127,7 @@ personne *ouvrir_fichier(char *nom_fichier, long *nbligne) //Jérémie Vernay
   return values; //retourne le pointeur du talbeau
 }
 
-void viderBuffer(void) //cette fonction permet de vider le buffer de stdin (généralement après un scanf) /Jérémie Vernay
+void viderBuffer(void) //cette fonction permet de vider le buffer de stdin (généralement après un scanf) /Bastian Mounier
 {
   long c;
   while ((c = getchar()) != EOF && c != '\n') //la boucle récupère des charactère tant qu'il différent d'\n ou qu'il est vide
@@ -560,7 +560,7 @@ void quicksort(personne *tab, long first, long last, int type_info) //fonction d
   }
 }
 
-void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifier une ligne du tableau /Jérémie Vernay
+void modif_personne(personne *tab,long *nbligne) //la fonction permet de modifier une ligne du tableau /Bastian Mounier
 {
   long ligne_selec;
   ligne_selec = selecligne(tab, nbligne); //elle récupère le numéro de ligne à modifier
